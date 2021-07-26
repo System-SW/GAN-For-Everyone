@@ -1,0 +1,16 @@
+
+# VSCODE
+.vscode/
+
+# CACHE
+__pycache__/
+
+# TRAINING
+logs/
+log/
+dataset/
+
+# ETC
+*.txt
+
+
