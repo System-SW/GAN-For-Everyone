@@ -34,12 +34,13 @@
 각 구현체의 경우 디렉터리로 구분되어 있으며 각 구현체 디렉터리의 경우 아래와 같은 구조를 기본으로 합니다. 별도의 구성요소가 포함되면 각 구현체 README.md에 설명을 포함합니다.
 
 ```bash
-# (option): 나중에 생성 혹은 불필요 
-# (*)			: 학습에 꼭 필요 혹은 기본 구성요소
-RepoRootpath
+# (option)	: 학습 과정 중 생성
+# (*)		: 학습에 꼭 필요 혹은 기본 구성요소
+RepoRootPath
 ├── 1. GAN					# 구현된 모델(구현체)
 │   ├── dataset		 		# downloaded data dir(option)
 │   ├── log					# log dir(option) 
+│   ├── log.tar.gz			# 비교를 위한 사전 학습 로그 (option)
 │   ├── [model paper].pdf 	# 구현체 원본 논문(option)
 │   ├── README.md	 		# 구현체 개별 설명(option)
 │   ├── dataset.py 			# 학습 데이터 전처리(*)
@@ -66,30 +67,32 @@ Template class 설명은 아래와 같습니다.
 
 ```python
 class Template(metaclass=ABCMeta):
-    """ Abstract Class for Trainer """
+	""" Abstract Class for Trainer """
 
-    def __init__(self, hp: dict, model_name: str):
-
+	def __init__(self, hp: dict, model_name: str):
 		"""
-        Args:
-            hp (dict): hyperparameters for train
-            model_name (str): train model name (for log dir name)
+		Args:
+			hp (dict): hyperparameters for train
+			model_name (str): train model name (for log dir name)
 
+		Desc:
 		- 학습진행필요한 변수를 생성 
 		- seed 값 초기화 
-		- Tensorboard를 위한 log 디렉토리 생성
+		- Tensorboard를 위한 log 디렉터리 생성
 		"""
 
-    @abstractmethod
-    def train(self):
+	@abstractmethod
+	def train(self):
 		""" 
+		Desc:
 		- 실제 학습을 진행할 메서드 
 		- 대부분의 구현은 여기서 이루어 짐 
 		"""
 
-    @abstractmethod
-    def test(self):
+	@abstractmethod
+	def test(self):
 		"""
+		Desc:
 		- 학습 도중 test/sample 생성을 진행할 메서드
 		"""
 ```
@@ -98,10 +101,18 @@ class Template(metaclass=ABCMeta):
 
 ```python
 # 새로운 모델 구현 예시 (train.py)
+import hyperparameters as hp
 class MyAwesomModelTrainer(Template):
-	...
+	def __init__(self):
+		super().__init__(hp,'MyAwesomModel')
+		...
+	def train(self):
+		...
+	def test(self):
+		...
 
-if __name__ == '__name__':
+if __name__ == '__main__':
+	# train.py에 main 작성 
 	trainer = MyAwesomModelTrainer()
 	trainer.train()
 ```
@@ -117,11 +128,19 @@ if __name__ == '__name__':
 you@server:~$ pip install requirements.txt
 ```
 
-2. 원하는 모델의 디렉토리로 이동해 학습자를 실행합니다. 
+2. 원하는 모델의 디렉터리로 이동해 학습자를 실행합니다.
 
 ```bash
 you@server:~$ pwd
-# repo root dirpath
-you@server:~$ cd MyAwesomModel # 원하는 모델 디렉토리로 이동
+[RepoRootPath]
+you@server:~$ cd MyAwesomModel # 원하는 모델 디렉터리로 이동
 you@server:~$ python train.py  # 학습자 실행
+```
+
+3. TensorBoard를 통해 학습 로그를 시각화합니다.
+
+```bash
+you@server:~$ pwd
+[RepoRootPath]/MyAwesomModel
+you@server:~$ tensorboard --bind_all --logdir log/MyAwesomModel/[TimeStamp]
 ```
