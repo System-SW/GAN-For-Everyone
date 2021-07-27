@@ -1,4 +1,4 @@
-Github Markdown 엔진은 LaTex을 지원하지 않기 때문에 [PDF](./src/README.md) 를 다운로드하길 바랍니다. 
+Github Markdown 엔진은 LaTex을 지원하지 않기 때문에 [PDF](./src/README.pdf) 를 다운로드하길 바랍니다. 
 
 # GAN (Generative Adversarial Network)
 $$ \underset{G}{min}\underset{D}{max} \ V(D,G) = \mathbb{E}_{x \sim p_{data(x)}}\Big[logD(x)\Big] + \mathbb{E}_{z \sim p_Z(z)}\Big[log \Big(1-D\big(G(z)\big)\Big)\Big]) $$
