@@ -1,5 +1,8 @@
+Github Markdown 엔진은 LaTex을 지원하지 않기 때문에 [PDF](./src/README.md) 를 다운로드하길 바랍니다. 
+
 # GAN (Generative Adversarial Network)
-$$ \underset{G}{min}\underset{D}{max} \ V(D,G) = \mathbb{E}_{x \sim p_{data(x)}}\Big[logD(x)\Big] + \mathbb{E}_{z \sim p_Z(z)}\Big[log \Big(1-D\big(G(z)\big)\Big)\Big]  $$
+$$ \underset{G}{min}\underset{D}{max} \ V(D,G) = \mathbb{E}_{x \sim p_{data(x)}}\Big[logD(x)\Big] + \mathbb{E}_{z \sim p_Z(z)}\Big[log \Big(1-D\big(G(z)\big)\Big)\Big]) $$
+
 Ian Goodfellow가 처음 제안했던 GAN은 생성자($G$), 분류자($D$)두 모델 간의 경쟁하면서 생성자 모델의 데이터 생성 능력을 개선한다. 생성자는 분류자가 진짜(1)로 인식하게끔 학습이 이루어지고 분류자는 실제데이터는 진짜(1)로 인식하며 생성자에서 생성되는 이미지는 가짜로 인식하게끔 학습이 이루어진다.
 
 ![1.png](./src/1.png)
