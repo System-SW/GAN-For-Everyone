@@ -1,6 +1,6 @@
 # **Table of GANs**
 
-1. **GAN**(Generative adversarial nets), 2014, Paper
+1. **[GAN](./1.GAN/src/README.pdf)**(Generative adversarial nets), 2014, [Paper](./1.GAN/src/NIPS-2014-generative-adversarial-nets-Paper.pdf) 
 2. **[TODO]** **DCGAN**(Deep Convolutional GANs), 2016, Paper
 3. **[TODO]** **WGAN**(Wasserstein GAN), 2017, Paper
 4. **[TODO]** **WGAN-GP**(WGAN gradient penalty), 2017, Paper
