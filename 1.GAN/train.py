@@ -17,7 +17,7 @@ class GAN(Template):
         self.gen = Generator(hp.Z_DIM, hp.IMAGE_DIM).to(hp.DEVICE)
 
         self.dataset = Dataset(hp.DATASET_DIR)
-        self.fixed_noise = torch.randn((hp.BATCH_SIZE, hp.Z_DIM)).to(hp.DEVICE)
+        self.FIXED_NOISE = torch.randn((hp.BATCH_SIZE, hp.Z_DIM)).to(hp.DEVICE)
 
         # optimizer
         self.opt_disc = optim.Adam(self.disc.parameters(), lr=hp.LR)
@@ -69,26 +69,25 @@ class GAN(Template):
                 with torch.no_grad():
                     if batch_idx % hp.LOG_INTERVAL == 0:
                         self.tb.add_scalar(
-                            'Real Prob', self.gan_prob(disc_real).item(),
+                            'TRAIN/Real Prob', self.gan_prob(disc_real).item(),
                             global_step=self.itr)
                         self.tb.add_scalar(
-                            'Fake Prob', self.gan_prob(disc_fake).item(),
+                            'TRAIN/Fake Prob', self.gan_prob(disc_fake).item(),
                             global_step=self.itr)
 
                     if batch_idx == 0:
                         pbar.set_description_str(
-                            f'Epoch[{epoch} / {hp.NUM_EPOCHS}], '
+                            f'Epoch[{epoch+1} / {hp.NUM_EPOCHS}], '
                             f'real:{self.gan_prob(disc_real).item(): .2f}, '
                             f'fake:{self.gan_prob(disc_fake).item(): .2f}, '
                             f'lossD:{lossD.item(): .2f}, '
-                            f'lossG:{lossG.item(): .2f} '
-                        )
+                            f'lossG:{lossG.item(): .2f} ')
                         self.test(real)
                 self.itr += 1
 
     def test(self, real):
         fake = self.gen(
-            self.fixed_noise).reshape(-1, 1, 28, 28)
+            self.FIXED_NOISE).reshape(-1, 1, 28, 28)
         data = real.reshape(-1, 1, 28, 28)
 
         img_grid_fake = torchvision.utils.make_grid(
