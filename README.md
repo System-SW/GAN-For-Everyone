@@ -1,7 +1,7 @@
 # **Table of GANs**
 
 1. **[GAN](./1.GAN/src/README.pdf)**(Generative adversarial nets), 2014, [Paper](./1.GAN/src/NIPS-2014-generative-adversarial-nets-Paper.pdf) 
-2. **[TODO]** **DCGAN**(Deep Convolutional GANs), 2016, Paper
+2. **[DCGAN](./2.DCGAN/README.md)**(Deep Convolutional GANs), 2016, [Paper](./2.DCGAN/src/DCGAN(UNSUPERVISED%20REPRESENTATION%20LEARNING%20WITH%20DEEP%20CONVOLUTIONAL%20GENERATIVE%20ADVERSARIAL%20NETWORKS).pdf)
 3. **[TODO]** **WGAN**(Wasserstein GAN), 2017, Paper
 4. **[TODO]** **WGAN-GP**(WGAN gradient penalty), 2017, Paper
 5. **[TODO]** **LSGAN**(Least Square GAN), 2016, Paper
@@ -19,20 +19,19 @@ GPU: NVIDIA 1a:00.0 NVIDIA Corporation Device 2204
 Memory: 128512MiB 
 ```
 # **Requirements**
-- torch>=1.7.1
-- torchvision>=0.8.2
-- tensorboard>=2.5.0
-- tensorboard-data-server==0.6.1
-- tensorboard-plugin-wit==1.8.0
-- tqdm>=4.28.1
-- scipy>=1.6.3
-- scikit-learn>=0.23.2
-- Pillow>=8.1.0
+- albumentations==1.0.3 
+- PyYAML==5.4.1
+- scipy==1.7.0
+- tensorboard==2.5.0
+- torch==1.9.0 
+- torchaudio==0.9.0a0+33b2469
+- torchvision==0.10.0
+- tqdm==4.61.2
 
 # **Tutorial**
 
 - **[TODO]** Repository Rules
-- **[TODO]** Anaconda CUDA Env install (Local)
+- [Anaconda CUDA Env install (Local)](Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
 - **[TODO]** Anaconda CUDA Env install (Docker)
 - **[TODO]** GPU Monitoring Tools
 - **[TODO]** AMP(Automatic Mixed Precision) package
@@ -133,6 +132,10 @@ if __name__ == '__main__':
 
 
 ## 3. Run Model
+
+**GPU를 사용한 학습을 위해서는 CUDA를 설치해야 합니다.**
+
+**Tutorial을 확인하시고 CUDA 설치를 진행하세요.**
 
 1. requirements.txt 를 사용해 python 인터프리터의 환경 설정을 진행 합니다.
 
