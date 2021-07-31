@@ -1,12 +1,18 @@
 # **Table of GANs**
-
-1. **[GAN](./1.GAN/src/README.pdf)**(Generative adversarial nets), 2014, [Paper](./1.GAN/src/NIPS-2014-generative-adversarial-nets-Paper.pdf) 
-2. **[TODO]** **DCGAN**(Deep Convolutional GANs), 2016, Paper
-3. **[TODO]** **WGAN**(Wasserstein GAN), 2017, Paper
+| No   | Model                         | Title                                                                                        | Year | Paper                                                                                                                                        |
+| :--- | :---------------------------- | :------------------------------------------------------------------------------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | [GAN](./1.GAN/src/README.pdf) | Generative adversarial nets                                                                  | 2014 | [PDF](./1.GAN/src/NIPS-2014-generative-adversarial-nets-Paper.pdf)                                                                           |
+| 2    | [DCGAN](./2.DCGAN/README.md)  | Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks | 2016 | [PDF](./2.DCGAN/src/DCGAN(UNSUPERVISED%20REPRESENTATION%20LEARNING%20WITH%20DEEP%20CONVOLUTIONAL%20GENERATIVE%20ADVERSARIAL%20NETWORKS).pdf) |
+| 3    | **[TODO]** **WGAN**           |                                                                                              |      | [PDF]()                                                                                                                                      |
+| 4    | **[TODO]** **WGAN-GP**        |                                                                                              |      | [PDF]()                                                                                                                                      |
+| 5    | **[TODO]** **LSGAN**          |                                                                                              |      | [PDF]()                                                                                                                                      |
+| 6    | **[TODO]** **Pix2Pix**        |                                                                                              |      | [PDF]()                                                                                                                                      |
+| 7    | **[TODO]** **LSGAN**          |                                                                                              |      | [PDF]()                                                                                                                                      |
+<!-- 3. (Wasserstein GAN), 2017, Paper
 4. **[TODO]** **WGAN-GP**(WGAN gradient penalty), 2017, Paper
 5. **[TODO]** **LSGAN**(Least Square GAN), 2016, Paper
 6. **[TODO]** **Pix2Pix**, 2018, Paper
-7. TO BE CONTINUED ...
+7. TO BE CONTINUED ... -->
 
 # **Environment**
 ```swift
@@ -32,8 +38,8 @@ Memory: 128512MiB
 # **Tutorial**
 
 - **[TODO]** Repository Rules
-- **[TODO]** Anaconda CUDA Env install (Local)
-- **[TODO]** Anaconda CUDA Env install (Docker)
+- [Anaconda CUDA Env install (Local)](./Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
+- [Anaconda CUDA Env install (Docker)](./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md)
 - **[TODO]** GPU Monitoring Tools
 - **[TODO]** AMP(Automatic Mixed Precision) package
 - **[TODO]** Kaggle cli tool(Dataset Download)
