@@ -25,15 +25,14 @@ GPU: NVIDIA 1a:00.0 NVIDIA Corporation Device 2204
 Memory: 128512MiB 
 ```
 # **Requirements**
-- torch>=1.7.1
-- torchvision>=0.8.2
-- tensorboard>=2.5.0
-- tensorboard-data-server==0.6.1
-- tensorboard-plugin-wit==1.8.0
-- tqdm>=4.28.1
-- scipy>=1.6.3
-- scikit-learn>=0.23.2
-- Pillow>=8.1.0
+- albumentations==1.0.3 
+- PyYAML==5.4.1
+- scipy==1.7.0
+- tensorboard==2.5.0
+- torch==1.9.0 
+- torchaudio==0.9.0a0+33b2469
+- torchvision==0.10.0
+- tqdm==4.61.2
 
 # **Tutorial**
 
@@ -139,6 +138,10 @@ if __name__ == '__main__':
 
 
 ## 3. Run Model
+
+**GPU를 사용한 학습을 위해서는 CUDA를 설치해야 합니다.**
+
+**Tutorial을 확인하시고 CUDA 설치를 진행하세요.**
 
 1. requirements.txt 를 사용해 python 인터프리터의 환경 설정을 진행 합니다.
 
