@@ -3,7 +3,7 @@
 | :--- | :---------------------------- | :------------------------------------------------------------------------------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1    | [GAN](./1.GAN/src/README.pdf) | Generative adversarial nets                                                                  | 2014 | [PDF](./1.GAN/src/NIPS-2014-generative-adversarial-nets-Paper.pdf)                                                                           |
 | 2    | [DCGAN](./2.DCGAN/README.md)  | Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks | 2016 | [PDF](./2.DCGAN/src/DCGAN(UNSUPERVISED%20REPRESENTATION%20LEARNING%20WITH%20DEEP%20CONVOLUTIONAL%20GENERATIVE%20ADVERSARIAL%20NETWORKS).pdf) |
-| 3    | **[TODO]** **WGAN**           |                                                                                              |      | [PDF]()                                                                                                                                      |
+| 3    | [WGAN](./3.WGAN/README.md)    | Wasserstein GAN                                                                              | 2017 | [PDF](./3.WGAN/src/Wasserstein%20GAN.pdf)                                                                                                    |
 | 4    | **[TODO]** **WGAN-GP**        |                                                                                              |      | [PDF]()                                                                                                                                      |
 | 5    | **[TODO]** **LSGAN**          |                                                                                              |      | [PDF]()                                                                                                                                      |
 | 6    | **[TODO]** **Pix2Pix**        |                                                                                              |      | [PDF]()                                                                                                                                      |
@@ -25,17 +25,14 @@ GPU 01: NVIDIA RTX-3090 NVIDIA Corporation Device 2204
 Memory: 128512MiB 
 ```
 # **Requirements**
-- albumentations==1.0.3 
+- albumentations==1.0.3
 - PyYAML==5.4.1
 - scipy==1.7.0
 - tensorboard==2.5.0
-- torch==1.9.0 
-- torchaudio==0.9.0a0+33b2469
+- torch==1.9.0
 - torchvision==0.10.0
 - tqdm==4.61.2
-
 # **Tutorial**
-
 - [**Repository Rules**](./Rules.md)
 - [Anaconda CUDA Env install (Local)](./Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
 - [Anaconda CUDA Env install (Docker)](./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md)
@@ -138,10 +135,6 @@ if __name__ == '__main__':
 
 
 ## 3. Run Model
-
-**GPU를 사용한 학습을 위해서는 CUDA를 설치해야 합니다.**
-
-**Tutorial을 확인하시고 CUDA 설치를 진행하세요.**
 
 1. requirements.txt 를 사용해 python 인터프리터의 환경 설정을 진행 합니다.
 
