@@ -20,8 +20,8 @@ OS: Ubuntu 20.04 LTS x86_64
 Kernel: 5.4.0-80-generic 
 Shell: zsh 5.8 
 CPU: Intel i9-10980XE (36) @ 4.800GHz 
-GPU: NVIDIA 68:00.0 NVIDIA Corporation Device 2204 
-GPU: NVIDIA 1a:00.0 NVIDIA Corporation Device 2204 
+GPU 00: NVIDIA RTX-3090 NVIDIA Corporation Device 2204 
+GPU 01: NVIDIA RTX-3090 NVIDIA Corporation Device 2204 
 Memory: 128512MiB 
 ```
 # **Requirements**
