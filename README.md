@@ -1,13 +1,13 @@
 # **Table of GANs**
-| No   | Model                         | Title                                                                                        | Year | Paper                                                                                                                                        |
-| :--- | :---------------------------- | :------------------------------------------------------------------------------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | [GAN](./1.GAN/src/README.pdf) | Generative adversarial nets                                                                  | 2014 | [PDF](./1.GAN/src/NIPS-2014-generative-adversarial-nets-Paper.pdf)                                                                           |
-| 2    | [DCGAN](./2.DCGAN/README.md)  | Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks | 2016 | [PDF](./2.DCGAN/src/DCGAN(UNSUPERVISED%20REPRESENTATION%20LEARNING%20WITH%20DEEP%20CONVOLUTIONAL%20GENERATIVE%20ADVERSARIAL%20NETWORKS).pdf) |
-| 3    | [WGAN](./3.WGAN/README.md)    | Wasserstein GAN                                                                              | 2017 | [PDF](./3.WGAN/src/Wasserstein%20GAN.pdf)                                                                                                    |
-| 4    | **[TODO]** **WGAN-GP**        |                                                                                              |      | [PDF]()                                                                                                                                      |
-| 5    | **[TODO]** **LSGAN**          |                                                                                              |      | [PDF]()                                                                                                                                      |
-| 6    | **[TODO]** **Pix2Pix**        |                                                                                              |      | [PDF]()                                                                                                                                      |
-| 7    | **[TODO]** **LSGAN**          |                                                                                              |      | [PDF]()                                                                                                                                      |
+| No   | Model                         | Year | Paper                                | State    |
+| :--- | :---------------------------- | ---- | ------------------------------------ | -------- |
+| 1    | [GAN](./1.GAN/src/README.pdf) | 2014 | [PDF](./1.GAN/src/paper_GAN.pdf)     | Done     |
+| 2    | [DCGAN](./2.DCGAN/README.md)  | 2016 | [PDF](./2.DCGAN/src/paper-DCGAN.pdf) | Done     |
+| 3    | [WGAN](./3.WGAN/README.md)    | 2017 | [PDF](./3.WGAN/src/paper-WGAN.pdf)   | Done     |
+| 4    | [WGAN-GP]()                   |      | [PDF](./)                            | **TODO** |
+| 5    | [LSGAN](./)                   |      | [PDF](./)                            | **TODO** |
+| 6    | [Pix2Pix](./)                 |      | [PDF](./)                            | **TODO** |
+| 7    | [CycleGAN](./)                |      | [PDF](./)                            | **TODO** |
 <!-- 3. (Wasserstein GAN), 2017, Paper
 4. **[TODO]** **WGAN-GP**(WGAN gradient penalty), 2017, Paper
 5. **[TODO]** **LSGAN**(Least Square GAN), 2016, Paper
@@ -33,7 +33,7 @@ Memory: 128512MiB
 - torchvision==0.10.0
 - tqdm==4.61.2
 # **Tutorial**
-- [**Repository Rules**](./Rules.md)
+- [Repository Rules](./Rules.md)
 - [Anaconda CUDA Env install (Local)](./Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
 - [Anaconda CUDA Env install (Docker)](./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md)
 - **[TODO]** GPU Monitoring Tools
@@ -43,13 +43,11 @@ Memory: 128512MiB
 # Repository Tutorial
 
 ## 0. Index
-
 1. Code Structure
 2. Template Meta
 3. Run Model
 
 ## 1. Code Structure
-
 각 구현체의 경우 디렉터리로 구분되어 있으며 각 구현체 디렉터리의 경우 아래와 같은 구조를 기본으로 합니다. 별도의 구성요소가 포함되면 각 구현체 README.md에 설명을 포함합니다.
 
 ```bash
@@ -74,7 +72,6 @@ RepoRootPath
 ```
 
 ## 2. Template Meta
-
 **해당 레포는 템플릿 프로그래밍을 사용합니다.**
 
 모든 구현체 내부의 "opt.py" 의 "Template" class를 상속받아 학습을 진행합니다.
@@ -135,7 +132,6 @@ if __name__ == '__main__':
 
 
 ## 3. Run Model
-
 1. requirements.txt 를 사용해 python 인터프리터의 환경 설정을 진행 합니다.
 
 ```bash
@@ -156,5 +152,5 @@ you@server:~$ python train.py  # 학습자 실행
 ```bash
 you@server:~$ pwd
 [RepoRootPath]/MyAwesomModel
-you@server:~$ tensorboard --bind_all --logdir log/MyAwesomModel/[TimeStamp]
+you@server:~$ tensorboard --bind_all --logdir log/MyAwesomModel/[**TimeStamp**]
 ```
