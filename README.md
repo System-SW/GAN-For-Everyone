@@ -1,13 +1,13 @@
 # **Table of GANs**
-| No   | Model                         | Year | Paper                                | State    |
-| :--- | :---------------------------- | ---- | ------------------------------------ | -------- |
-| 1    | [GAN](./1.GAN/src/README.pdf) | 2014 | [PDF](./1.GAN/src/paper_GAN.pdf)     | Done     |
-| 2    | [DCGAN](./2.DCGAN/README.md)  | 2016 | [PDF](./2.DCGAN/src/paper-DCGAN.pdf) | Done     |
-| 3    | [WGAN](./3.WGAN/README.md)    | 2017 | [PDF](./3.WGAN/src/paper-WGAN.pdf)   | Done     |
-| 4    | [WGAN-GP]()                   |      | [PDF](./)                            | **TODO** |
-| 5    | [LSGAN](./)                   |      | [PDF](./)                            | **TODO** |
-| 6    | [Pix2Pix](./)                 |      | [PDF](./)                            | **TODO** |
-| 7    | [CycleGAN](./)                |      | [PDF](./)                            | **TODO** |
+| No   | Model                         | Year | Paper                                  | State         |
+| :--- | :---------------------------- | ---- | -------------------------------------- | ------------- |
+| 1    | [GAN](./GAN/src/README.pdf)   | 2014 | [PDF](./GAN/src/paper_GAN.pdf)         | Done          |
+| 2    | [DCGAN](./DCGAN/README.md)    | 2016 | [PDF](./DCGAN/src/paper-DCGAN.pdf)     | Done          |
+| 3    | [WGAN](./WGAN/README.md)      | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)       | Done          |
+| 4    | [WGAN-GP](./WGAN-GP/train.py) |      | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf) | **Code Done** |
+| 5    | [LSGAN](./LSGAN/train.py)     |      | [PDF](./LSGAN/src/paper-LSGAN.pdf)     | **Code Done** |
+| 6    | [Pix2Pix](./)                 |      | [PDF](./)                              | **TODO**      |
+| 7    | [CycleGAN](./)                |      | [PDF](./)                              | **TODO**      |
 <!-- 3. (Wasserstein GAN), 2017, Paper
 4. **[TODO]** **WGAN-GP**(WGAN gradient penalty), 2017, Paper
 5. **[TODO]** **LSGAN**(Least Square GAN), 2016, Paper
@@ -54,7 +54,7 @@ Memory: 128512MiB
 # (option   : 학습 과정 중 생성
 # (*)       : 학습에 꼭 필요 혹은 기본 구성요소
 RepoRootPath
-├── 1. GAN                  # 구현된 모델(구현체)
+├── GAN                  # 구현된 모델(구현체)
 │   ├── dataset             # downloaded data dir(option)
 │   ├── log                 # log dir(option)
 │   ├── log.tar.gz          # 비교를 위한 사전 학습 로그 (option)
@@ -65,8 +65,8 @@ RepoRootPath
 │   ├── model.py            # 구현된 모델(*)
 │   ├── train.py            # 구현체 학습자(*)
 │   └── opt.py              # Template class 와 같은 부가 요소
-├── 2.DCGAN                 # 구현된 모델(구현체)
-├── N. MyAwesomModel        # 구현된 모델(구현체)
+├── DCGAN                 # 구현된 모델(구현체)
+├── MyAwesomModel        # 구현된 모델(구현체)
 ├── README.md
 ├── ... ETCs
 ```

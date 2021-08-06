@@ -20,7 +20,7 @@
 # (option   : 학습 과정 중 생성
 # (*)       : 학습에 꼭 필요 혹은 기본 구성요소
 RepoRootPath
-├── 1. GAN                  # 구현된 모델(구현체)
+├── GAN                  # 구현된 모델(구현체)
 │   ├── dataset             # downloaded data dir(option)
 │   ├── log                 # log dir(option)
 │   ├── log.tar.gz          # 비교를 위한 사전 학습 로그 (option)
