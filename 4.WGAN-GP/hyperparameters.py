@@ -1,0 +1,39 @@
+
+import torch
+
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+SEED = 2333
+
+
+class DATASET_MNIST:
+    CAT = 'mnist'
+    DIR = 'dataset/'
+    IMAGE_SIZE = 64
+    IMAGE_CHANNELS = 1
+
+
+class DATASET_CELABA(DATASET_MNIST):
+    CAT = 'celaba'
+    DIR = ''
+    IMAGE_SIZE = 64
+    IMAGE_CHANNELS = 3
+
+
+DATASET = DATASET_MNIST
+IMAGE_SIZE = DATASET.IMAGE_SIZE
+IMAGE_CHANNELS = DATASET.IMAGE_CHANNELS
+
+
+BATCH_SIZE = 128
+NOISE_DIM = 100
+GEN_DIM = 16
+DISC_DIM = 16
+
+NUM_EPOCHS = 10
+LEARNING_RATE = 1e-4
+BETAS = (0.5, 0.9)
+CRITIC_ITERATIONS = 5
+LAMBDA_GP = 10
+
+LOG_INTERVAL = 10
+TEST_INTERVAL = 100
