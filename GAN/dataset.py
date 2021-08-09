@@ -4,13 +4,24 @@ from torch.utils.data import DataLoader
 
 
 class Dataset:
-    def __init__(self, dataset_dir) -> None:
+    def __init__(self, dataset) -> None:
         transform = transforms.Compose(
-            [transforms.ToTensor(),
-             transforms.Normalize((0.5,), (0.5,))]
+            [
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)],
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)]
+                ),
+            ]
         )
-        self._dataset = datasets.MNIST(
-            root=dataset_dir, transform=transform, download=True)
+
+        ds = datasets.MNIST
+        print('MNIST Dataset')
+
+        self._dataset = ds(
+            root=dataset.DIR,
+            transform=transform,
+            download=True)
 
     def create_dataloader(self, batch_size: int):
         return DataLoader(self._dataset,

@@ -1,12 +1,25 @@
 import torch
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DATASET_DIR = 'dataset/'
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 SEED = 2333
-LR = 2e-4
-Z_DIM = 64
-CHANNELS_IMAGE = 3
-IMAGE_DIM = 28 * 28 * 1  # 784
+
+
+class DATASET_MNIST:
+    CAT = 'mnist'
+    DIR = 'dataset/'
+    IMAGE_SIZE = 28
+    IMAGE_CHANNELS = 1
+
+
+DATASET = DATASET_MNIST
+IMAGE_SIZE = DATASET.IMAGE_SIZE
+IMAGE_CHANNELS = DATASET.IMAGE_CHANNELS
+
 BATCH_SIZE = 64
+LR = 3e-4
+Z_DIM = 64
 NUM_EPOCHS = 50
+SAMPLE_SIZE = 32
+
 LOG_INTERVAL = 10
+TEST_INTERVAL = 100

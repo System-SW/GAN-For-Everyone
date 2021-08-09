@@ -12,12 +12,15 @@ from opt import Template
 
 class GAN(Template):
     def __init__(self):
-        super().__init__(hp, "GAN")
-        self.disc = Discriminator(hp.IMAGE_DIM).to(hp.DEVICE)
-        self.gen = Generator(hp.Z_DIM, hp.IMAGE_DIM).to(hp.DEVICE)
+        super().__init__(
+            device=hp.DEVICE, seed=hp.SEED, model_name='GAN')
 
-        self.dataset = Dataset(hp.DATASET_DIR)
-        self.FIXED_NOISE = torch.randn((hp.BATCH_SIZE, hp.Z_DIM)).to(hp.DEVICE)
+        self.disc = Discriminator(hp.IMAGE_SIZE**2).to(hp.DEVICE)
+        self.gen = Generator(hp.Z_DIM, hp.IMAGE_SIZE**2).to(hp.DEVICE)
+
+        self.dataset = Dataset(hp.DATASET)
+        self.FIXED_NOISE = torch.randn(
+            (hp.SAMPLE_SIZE, hp.Z_DIM)).to(hp.DEVICE)
 
         # optimizer
         self.opt_disc = optim.Adam(self.disc.parameters(), lr=hp.LR)
@@ -34,9 +37,9 @@ class GAN(Template):
 
         # Training
         for epoch in range(hp.NUM_EPOCHS):
-            pbar = tqdm(enumerate(loader), total=len(loader))
+            pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (real, _) in pbar:
-                real = real.view(-1, 784).to(hp.DEVICE)
+                real = real.view(-1, hp.IMAGE_SIZE**2).to(hp.DEVICE)
                 batch_size = real.shape[0]
                 noise = torch.randn(batch_size, hp.Z_DIM).to(hp.DEVICE)
 
@@ -86,14 +89,15 @@ class GAN(Template):
                 self.itr += 1
 
     def test(self, real):
+        self.gen.eval()
         fake = self.gen(
-            self.FIXED_NOISE).reshape(-1, 1, 28, 28)
-        data = real.reshape(-1, 1, 28, 28)
+            self.FIXED_NOISE).reshape(-1, 1, hp.IMAGE_SIZE, hp.IMAGE_SIZE)
+        real = real.reshape(-1, 1, hp.IMAGE_SIZE, hp.IMAGE_SIZE)
 
         img_grid_fake = torchvision.utils.make_grid(
             fake, normalize=True)
         img_grid_real = torchvision.utils.make_grid(
-            data, normalize=True)
+            real[:hp.SAMPLE_SIZE], normalize=True)
 
         self.tb.add_image(
             "Fake Images", img_grid_fake,
@@ -103,7 +107,9 @@ class GAN(Template):
             "Real Images", img_grid_real,
             global_step=self.itr
         )
+        self.gen.train()
 
 
 if __name__ == '__main__':
     trainer = GAN().train()
+    print('Train Done')
