@@ -45,7 +45,7 @@ class DCGAN(Template):
 
         # Training
         for epoch in range(hp.NUM_EPOCHS):
-            pbar = tqdm(enumerate(loader), total=len(loader))
+            pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (real, _) in pbar:
                 real = real.to(self.device)
                 batch_size = real.shape[0]
@@ -98,6 +98,7 @@ class DCGAN(Template):
                 self.itr += 1
 
     def test(self, real):
+        self.gen.eval()
         fake = self.gen(self.FIXED_NOISE)
         img_grid_fake = torchvision.utils.make_grid(
             fake, normalize=True)
@@ -111,7 +112,9 @@ class DCGAN(Template):
             "Real Images", img_grid_real,
             global_step=self.itr
         )
+        self.gen.train()
 
 
 if __name__ == '__main__':
     trainer = DCGAN().train()
+    print('Train Done')

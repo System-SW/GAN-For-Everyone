@@ -42,7 +42,7 @@ class WGAN(Template):
 
         # Training
         for epoch in range(hp.NUM_EPOCHS):
-            pbar = tqdm(enumerate(loader), total=len(loader))
+            pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (real, _) in pbar:
                 real = real.to(self.device)
                 batch_size = real.shape[0]
@@ -113,3 +113,4 @@ class WGAN(Template):
 
 if __name__ == '__main__':
     trainer = WGAN().train()
+    print('Train Done')

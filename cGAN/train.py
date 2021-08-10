@@ -46,7 +46,7 @@ class ConditionalGAN(Template):
 
         # Training
         for epoch in range(hp.NUM_EPOCHS):
-            pbar = tqdm(enumerate(loader), total=len(loader))
+            pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (real, labels) in pbar:
                 real = real.to(self.device)
                 labels = labels.to(self.device)
@@ -100,6 +100,7 @@ class ConditionalGAN(Template):
                 self.itr += 1
 
     def test(self, real, labels):
+        self.gen.eval()
         labels = labels[:32]
         fake = self.gen(self.FIXED_NOISE, labels)
         img_grid_fake = torchvision.utils.make_grid(
@@ -114,7 +115,9 @@ class ConditionalGAN(Template):
             "Real Images", img_grid_real,
             global_step=self.itr
         )
+        self.gen.train()
 
 
 if __name__ == '__main__':
     trainer = ConditionalGAN().train()
+    print('Train Done')
