@@ -6,7 +6,7 @@
 | 3    | [WGAN](./WGAN/README.md)       | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)              | Done          |
 | 4    | [WGAN-GP](./WGAN-GP/README.md) | 2017 | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf)        | **Code Done** |
 | 5    | [LSGAN](./LSGAN/README.md)     |      | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
-| 6    | [EBGAN](./EBGAN/README.md)     |      | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Doing**     |
+| 6    | [EBGAN](./EBGAN/README.md)     |      | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
 | 7    | [cGAN](./cGAN/README.md)       |      | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
 | 8    | [Pix2Pix](./)                  |      | [PDF](./)                                     | **TODO**      |
 | 9    | [CycleGAN](./)                 |      | [PDF](./)                                     | **TODO**      |
