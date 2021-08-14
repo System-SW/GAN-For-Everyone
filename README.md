@@ -51,19 +51,21 @@ Memory: 128512MiB
 # (option   : 학습 과정 중 생성
 # (*)       : 학습에 꼭 필요 혹은 기본 구성요소
 RepoRootPath
-├── GAN                  # 구현된 모델(구현체)
-│   ├── dataset             # downloaded data dir(option)
+│── opt.py                  # Template class 와 같은 부가 요소
+├── dataset.py              # 학습 데이터 전처리(*)
+├── dataset                 # downloaded data dir(option)
+├── GAN                     # 구현된 모델(구현체)
 │   ├── log                 # log dir(option)
 │   ├── log.tar.gz          # 비교를 위한 사전 학습 로그 (option)
 │   ├── [model paper].pdf   # 구현체 원본 논문(option)
 │   ├── README.md           # 구현체 개별 설명(option)
-│   ├── dataset.py          # 학습 데이터 전처리(*)
 │   ├── hyperparameters.py  # 학습 파라미터(*)
 │   ├── model.py            # 구현된 모델(*)
 │   ├── train.py            # 구현체 학습자(*)
-│   └── opt.py              # Template class 와 같은 부가 요소
-├── DCGAN                 # 구현된 모델(구현체)
-├── MyAwesomModel        # 구현된 모델(구현체)
+│   ├── dataset.py          # link to root dir's dataset.py (*)
+│   └── opt.py              # link to root dir's opt.py (*)
+├── DCGAN                   # 구현된 모델(구현체)
+├── MyAwesomModel           # 구현된 모델(구현체)
 ├── README.md
 ├── ... ETCs
 ```
@@ -71,7 +73,7 @@ RepoRootPath
 ## 2. Template Meta
 **해당 레포는 템플릿 프로그래밍을 사용합니다.**
 
-모든 구현체 내부의 "opt.py" 의 "Template" class를 상속받아 학습을 진행합니다.
+모든 구현체 내부의 "opt.py"(link) 의 "Template" class를 상속받아 학습을 진행합니다.
 
 Template class 설명은 아래와 같습니다.
 
