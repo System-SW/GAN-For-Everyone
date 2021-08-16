@@ -1,9 +1,10 @@
+import os
+
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
-from torch.utils import data
 from PIL import Image
-import os
+from torch.utils import data
+from torch.utils.data import DataLoader
 
 
 class CelabADataset(data.Dataset):
@@ -57,10 +58,11 @@ class Dataset:
         }
 
         print(f'{dataset.CAT.upper()} Dataset')
-        self._dataset = DATASET[dataset.CAT](dataset)
+        self._dataset_train = DATASET[dataset.CAT](dataset)
+        self._dataset_val = DATASET[dataset.CAT](dataset)
 
     def create_dataloader(self, batch_size: int):
-        return DataLoader(self._dataset,
+        return DataLoader(self._dataset_train,
                           batch_size=batch_size,
                           shuffle=True)
 
