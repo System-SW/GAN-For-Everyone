@@ -1,0 +1,45 @@
+import torch
+
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+SEED = 2333
+
+
+class DATASET_MAP:
+    CAT = 'MAP'
+    DIR = '/dataset/pix2pix/maps/train'
+    VAL_DIR = '/dataset/pix2pix/maps/val'
+    IMAGE_SIZE = 256
+    IMAGE_CHANNELS = 3
+    INPUT_CHANNELS = 3
+
+
+class DATASET_ANIME(DATASET_MAP):
+    CAT = 'ANIME'
+    DIR = '/dataset/NVME/PaintsTensorFlow/shuushuu/train'
+    VAL_DIR = '/dataset/NVME/PaintsTensorFlow/shuushuu/val'
+    INPUT_CHANNELS = 1
+
+
+class DATASET_BW(DATASET_ANIME):
+    CAT = 'BlackWhight'
+
+
+DATASET = DATASET_ANIME
+IMAGE_SIZE = DATASET.IMAGE_SIZE
+IMAGE_CHANNELS = DATASET.IMAGE_CHANNELS
+INPUT_CHANNELS = DATASET.INPUT_CHANNELS
+NUM_WORKERS = 16
+
+GEN_DIM = 64
+DISC_DIM = 64
+
+BATCH_SIZE = 16
+LEARNING_RATE = 1e-4
+BETAS = (0.5, 0.999)
+
+NUM_EPOCHS = 10
+LRAMBDA_L1 = 100
+
+LOG_INTERVAL = 10
+TEST_INTERVAL = 1000
+CKPT_PATH = None
