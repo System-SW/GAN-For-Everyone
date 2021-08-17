@@ -6,8 +6,9 @@
 __pycache__/
 
 # TRAINING
-logs/
-log/
+*logs*/
+*log*/
 dataset/
+*.tar
 
 
