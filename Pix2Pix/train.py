@@ -1,6 +1,5 @@
 import torch
 import os
-from torch._C import device
 import torch.nn as nn
 import torch.optim as optim
 from torch.serialization import save
@@ -9,7 +8,7 @@ from tqdm import tqdm
 
 import hyperparameters as hp
 from dataset import Dataset
-from model import Discriminator, Generator, initialize_weights
+from model import Discriminator, Generator
 from opt import Template
 
 

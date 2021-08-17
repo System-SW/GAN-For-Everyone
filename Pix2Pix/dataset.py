@@ -130,7 +130,7 @@ class AnimeDataset(data.Dataset):
 
 class BlackWhightDataset(data.Dataset):
     def __init__(self, dataset) -> None:
-        for root, _, files in os.walk(os.path.join(dataset.DIR, 'line')):
+        for root, _, files in os.walk(os.path.join(dataset.DIR, 'color')):
             self.image_paths = sorted([os.path.join(root, filename)
                                        for filename in files])
 
@@ -160,7 +160,7 @@ class BlackWhightDataset(data.Dataset):
         )
 
     def __len__(self):
-        return len(self.color_paths)
+        return len(self.image_paths)
 
     def __getitem__(self, index):
         image_path = self.image_paths[index]
@@ -174,7 +174,7 @@ class BlackWhightDataset(data.Dataset):
         input_image = augmentations['image']
         color_image = augmentations['image0']
 
-        input_image = self.trainsform_line(image=input_image)['image']
+        input_image = self.trainsform_input(image=input_image)['image']
         color_image = self.trainsform_color(image=color_image)['image']
 
         return input_image, color_image
