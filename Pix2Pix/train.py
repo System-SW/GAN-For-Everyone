@@ -2,7 +2,6 @@ import torch
 import os
 import torch.nn as nn
 import torch.optim as optim
-from torch.serialization import save
 import torchvision
 from tqdm import tqdm
 
@@ -14,8 +13,7 @@ from opt import Template
 
 class Pix2Pix(Template):
     def __init__(self):
-        super().__init__(
-            device=hp.DEVICE, seed=hp.SEED, model_name='Pix2Pix')
+        super().__init__(device=hp.DEVICE, seed=hp.SEED, model_name='Pix2Pix')
 
         self.dataset = Dataset(hp.DATASET)
         self.gen = Generator(hp.INPUT_CHANNELS,

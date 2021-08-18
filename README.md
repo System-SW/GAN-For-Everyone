@@ -8,7 +8,7 @@
 | 5    | [LSGAN](./LSGAN/README.md)     |      | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
 | 6    | [EBGAN](./EBGAN/README.md)     |      | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
 | 7    | [cGAN](./cGAN/README.md)       |      | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
-| 8    | [Pix2Pix](./)                  |      | [PDF](./)                                     | **TODO**      |
+| 8    | [Pix2Pix](./Pix2Pix/README.md) |      | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
 | 9    | [CycleGAN](./)                 |      | [PDF](./)                                     | **TODO**      |
 
 # **Environment**
