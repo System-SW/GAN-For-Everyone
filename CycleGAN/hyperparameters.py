@@ -1,0 +1,36 @@
+import torch
+
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+SEED = 2333
+
+
+class DATASET_HZ:
+    CAT = 'HZ'
+    DIR = '../dataset/CycleGAN/horse2zebra/horse2zebra/train'
+    VAL_DIR = '../dataset/CycleGAN/horse2zebra/horse2zebra/val'
+    IMAGE_SIZE = 256
+    INPUT_CHANNELS = 3
+    OUPUT_CHANNELS = 3
+
+
+DATASET = DATASET_HZ
+IMAGE_SIZE = DATASET.IMAGE_SIZE
+INPUT_CHANNELS = DATASET.INPUT_CHANNELS
+OUPUT_CHANNELS = DATASET.OUPUT_CHANNELS
+
+BATCH_SIZE = 1
+GEN_DIM = 64
+DISC_DIM = 64
+NUM_RESIDUALS = 9
+NUM_EPOCHS = 200
+NUM_WORKERS = 16
+SAMPLE_SIZE = 4
+
+LEARNING_RATE = 2e-4
+BETAS = (0.5, 0.999)
+LAMBDA_CYCLE = 10.0
+LAMBDA_IDENTITY = 5.0
+
+
+LOG_INTERVAL = 10
+TEST_INTERVAL = 100
