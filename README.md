@@ -1,15 +1,15 @@
 # **Table of GANs**
- | Model                          | Year | Paper                                         | State         |
- | :----------------------------- | ---- | --------------------------------------------- | ------------- |
- | [GAN](./GAN/src/README.pdf)    | 2014 | [PDF](./GAN/src/paper_GAN.pdf)                | Done          |
- | [cGAN](./cGAN/README.md)       | 2014 | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
- | [DCGAN](./DCGAN/README.md)     | 2016 | [PDF](./DCGAN/src/paper-DCGAN.pdf)            | Done          |
- | [WGAN](./WGAN/README.md)       | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)              | Done          |
- | [WGAN-GP](./WGAN-GP/README.md) | 2017 | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf)        | **Code Done** |
- | [LSGAN](./LSGAN/README.md)     | 2017 | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
- | [EBGAN](./EBGAN/README.md)     | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
- | [Pix2Pix](./Pix2Pix/README.md) | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
- | [CycleGAN](./)                 | 2017 | [PDF](./)                                     | **TODO**      |
+ | Model                            | Year | Paper                                         | State         |
+ | :------------------------------- | ---- | --------------------------------------------- | ------------- |
+ | [GAN](./GAN/src/README.pdf)      | 2014 | [PDF](./GAN/src/paper_GAN.pdf)                | Done          |
+ | [cGAN](./cGAN/README.md)         | 2014 | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
+ | [DCGAN](./DCGAN/README.md)       | 2016 | [PDF](./DCGAN/src/paper-DCGAN.pdf)            | Done          |
+ | [WGAN](./WGAN/README.md)         | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)              | Done          |
+ | [WGAN-GP](./WGAN-GP/README.md)   | 2017 | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf)        | **Code Done** |
+ | [LSGAN](./LSGAN/README.md)       | 2017 | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
+ | [EBGAN](./EBGAN/README.md)       | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
+ | [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
+ | [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
 
 
 # **Environment**
