@@ -34,8 +34,8 @@ Memory: 128512MiB
 - [Anaconda CUDA Env install (Local)](./Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
 - [Anaconda CUDA Env install (Docker)](./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md)
 - [Useful Tools](./Tutorial/Tools.md)
-- **[TODO]** AMP(Automatic Mixed Precision) package
-- **[TODO]** Kaggle cli tool(Dataset Download)
+- [AMP(Automatic Mixed Precision) package](https://pytorch.org/docs/stable/notes/amp_examples.html)
+- [Kaggle API(Dataset Download)](./Tutorial/Kaggle%20cli%20tool.md)
 
 # Repository Tutorial
 
