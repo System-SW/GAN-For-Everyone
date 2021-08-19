@@ -5,25 +5,25 @@ SEED = 2333
 
 
 class DATASET_MAP:
-    CAT = 'MAP'
-    DIR = '../dataset/pix2pix/maps/train'
-    VAL_DIR = '../dataset/pix2pix/maps/val'
+    CAT = "MAP"
+    DIR = "../dataset/pix2pix/maps/train"
+    VAL_DIR = "../dataset/pix2pix/maps/val"
     IMAGE_SIZE = 256
     IMAGE_CHANNELS = 3
     INPUT_CHANNELS = 3
 
 
 class DATASET_ANIME(DATASET_MAP):
-    CAT = 'ANIME'
-    DIR = 'U R DATASET PATH'
-    VAL_DIR = 'U R DATASET PATH'
+    CAT = "ANIME"
+    DIR = "U R DATASET PATH"
+    VAL_DIR = "U R DATASET PATH"
     INPUT_CHANNELS = 1
 
 
 class DATASET_BW(DATASET_ANIME):
-    CAT = 'BlackWhight'
-    DIR = 'U R DATASET PATH'
-    VAL_DIR = 'U R DATASET PATH'
+    CAT = "BlackWhight"
+    DIR = "U R DATASET PATH"
+    VAL_DIR = "U R DATASET PATH"
 
 
 DATASET = DATASET_MAP

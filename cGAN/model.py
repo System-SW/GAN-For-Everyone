@@ -7,16 +7,11 @@ class Discriminator(nn.Module):
         super(Discriminator, self).__init__()
         self.img_size = img_size
         self.disc = nn.Sequential(
-            nn.Conv2d(
-                channels_img + 1, dim,
-                kernel_size=4, stride=2, padding=1
-            ),
+            nn.Conv2d(channels_img + 1, dim, kernel_size=4, stride=2, padding=1),
             nn.LeakyReLU(0.2),
-
             self._block(dim * 1, dim * 2, 4, 2, 1),
             self._block(dim * 2, dim * 4, 4, 2, 1),
             self._block(dim * 4, dim * 8, 4, 2, 1),
-
             nn.Conv2d(dim * 8, 1, kernel_size=4, stride=2, padding=0),
         )
         self.embed = nn.Embedding(num_classes, img_size * img_size)
@@ -37,18 +32,17 @@ class Discriminator(nn.Module):
 
     def forward(self, x, labels):
         embedding = self.embed(labels).view(
-            labels.shape[0], 1, self.img_size, self.img_size)
+            labels.shape[0], 1, self.img_size, self.img_size
+        )
         x = torch.cat([x, embedding], dim=1)
         return self.disc(x)
 
 
 class Generator(nn.Module):
-    def __init__(self, z_dim, channels_img, dim,
-                 num_classes, img_size, embed_size):
+    def __init__(self, z_dim, channels_img, dim, num_classes, img_size, embed_size):
         super(Generator, self).__init__()
         self.img_size = img_size
         self.net = nn.Sequential(
-
             self._block(z_dim + embed_size, dim * 16, 4, 1, 0),  # img: 4x4
             self._block(dim * 16, dim * 8, 4, 2, 1),  # img: 8x8
             self._block(dim * 8, dim * 4, 4, 2, 1),  # img: 16x16

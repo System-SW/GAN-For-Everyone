@@ -5,15 +5,15 @@ SEED = 2333
 
 
 class DATASET_MNIST:
-    CAT = 'mnist'
-    DIR = '../dataset/'
+    CAT = "mnist"
+    DIR = "../dataset/"
     IMAGE_SIZE = 64
     IMAGE_CHANNELS = 1
 
 
 class DATASET_CELABA(DATASET_MNIST):
-    CAT = 'celaba'
-    DIR = ''
+    CAT = "celaba"
+    DIR = ""
     IMAGE_SIZE = 64
     IMAGE_CHANNELS = 3
 

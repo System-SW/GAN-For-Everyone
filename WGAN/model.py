@@ -6,16 +6,11 @@ class Critic(nn.Module):
     def __init__(self, channels_img, dim):
         super(Critic, self).__init__()
         self.disc = nn.Sequential(
-            nn.Conv2d(
-                channels_img, dim,
-                kernel_size=4, stride=2, padding=1
-            ),
+            nn.Conv2d(channels_img, dim, kernel_size=4, stride=2, padding=1),
             nn.LeakyReLU(0.2),
-
             self._build_block(dim * 1, dim * 2, 4, 2, 1),
             self._build_block(dim * 2, dim * 4, 4, 2, 1),
             self._build_block(dim * 4, dim * 8, 4, 2, 1),
-
             nn.Conv2d(dim * 8, 1, kernel_size=4, stride=2, padding=0),
         )
 
@@ -41,7 +36,6 @@ class Generator(nn.Module):
     def __init__(self, z_dim, channels_img, dim):
         super(Generator, self).__init__()
         self.net = nn.Sequential(
-
             self._build_block(z_dim, dim * 16, 4, 1, 0),  # img: 4x4
             self._build_block(dim * 16, dim * 8, 4, 2, 1),  # img: 8x8
             self._build_block(dim * 8, dim * 4, 4, 2, 1),  # img: 16x16

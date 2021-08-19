@@ -5,9 +5,9 @@ SEED = 2333
 
 
 class DATASET_HZ:
-    CAT = 'HZ'
-    DIR = '../dataset/CycleGAN/horse2zebra/horse2zebra/train'
-    VAL_DIR = '../dataset/CycleGAN/horse2zebra/horse2zebra/val'
+    CAT = "HZ"
+    DIR = "../dataset/CycleGAN/horse2zebra/horse2zebra/train"
+    VAL_DIR = "../dataset/CycleGAN/horse2zebra/horse2zebra/val"
     IMAGE_SIZE = 256
     INPUT_CHANNELS = 3
     OUPUT_CHANNELS = 3
@@ -16,7 +16,7 @@ class DATASET_HZ:
 DATASET = DATASET_HZ
 IMAGE_SIZE = DATASET.IMAGE_SIZE
 INPUT_CHANNELS = DATASET.INPUT_CHANNELS
-OUPUT_CHANNELS = DATASET.OUPUT_CHANNELS
+OUTPUT_CHANNELS = DATASET.OUPUT_CHANNELS
 
 BATCH_SIZE = 1
 GEN_DIM = 64

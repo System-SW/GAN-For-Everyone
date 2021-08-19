@@ -1,4 +1,5 @@
 # **Table of GANs**
+
  | Model                            | Year | Paper                                         | State         |
  | :------------------------------- | ---- | --------------------------------------------- | ------------- |
  | [GAN](./GAN/src/README.pdf)      | 2014 | [PDF](./GAN/src/paper_GAN.pdf)                | Done          |
@@ -11,8 +12,8 @@
  | [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
  | [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
 
-
 # **Environment**
+
 ```swift
 OS: Ubuntu 20.04 LTS x86_64 
 Kernel: 5.4.0-80-generic 
@@ -22,7 +23,9 @@ GPU 00: NVIDIA RTX-3090 NVIDIA Corporation Device 2204
 GPU 01: NVIDIA RTX-3090 NVIDIA Corporation Device 2204 
 Memory: 128512MiB 
 ```
+
 # **Requirements**
+
 - albumentations==1.0.3
 - PyYAML==5.4.1
 - scipy==1.7.0
@@ -30,7 +33,9 @@ Memory: 128512MiB
 - torch==1.9.0
 - torchvision==0.10.0
 - tqdm==4.61.2
+
 # **Tutorial**
+
 - [Repository Rules](./Rules.md)
 - [Anaconda CUDA Env install (Local)](./Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
 - [Anaconda CUDA Env install (Docker)](./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md)
@@ -41,11 +46,13 @@ Memory: 128512MiB
 # Repository Tutorial
 
 ## 0. Index
+
 1. Code Structure
 2. Template Meta
 3. Run Model
 
 ## 1. Code Structure
+
 각 구현체의 경우 디렉터리로 구분되어 있으며 각 구현체 디렉터리의 경우 아래와 같은 구조를 기본으로 합니다. 별도의 구성요소가 포함되면 각 구현체 README.md에 설명을 포함합니다.
 
 ```bash
@@ -72,6 +79,7 @@ RepoRootPath
 ```
 
 ## 2. Template Meta
+
 **해당 레포는 템플릿 프로그래밍을 사용합니다.**
 
 모든 구현체 내부의 "opt.py"(link) 의 "Template" class를 상속받아 학습을 진행합니다.
@@ -130,8 +138,8 @@ if __name__ == '__main__':
     trainer.train()
 ```
 
-
 ## 3. Run Model
+
 1. requirements.txt 를 사용해 python 인터프리터의 환경 설정을 진행 합니다.
 
 ```bash

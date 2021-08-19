@@ -7,24 +7,30 @@ class Critic(nn.Module):
         super(Critic, self).__init__()
 
         self.main = nn.Sequential(
-            nn.Conv2d(channels_image, dim,
-                      kernel_size=4, stride=2, padding=1, bias=False),
+            nn.Conv2d(
+                channels_image, dim, kernel_size=4, stride=2, padding=1, bias=False
+            ),
             nn.LeakyReLU(0.2),
-
             self._block(dim, dim * 2, 4, 2, 1),
             self._block(dim * 2, dim * 4, 4, 2, 1),
             self._block(dim * 4, dim * 8, 4, 2, 1),
-
-            nn.Conv2d(dim * 8, 1, kernel_size=4, stride=2, padding=0)
+            nn.Conv2d(dim * 8, 1, kernel_size=4, stride=2, padding=0),
         )
 
-    def _block(self, in_channels: int, out_channels: int,
-               kernel_size: int, stride: int, padding: int):
+    def _block(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size: int,
+        stride: int,
+        padding: int,
+    ):
         return nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size,
-                      stride, padding, bias=False),
+            nn.Conv2d(
+                in_channels, out_channels, kernel_size, stride, padding, bias=False
+            ),
             nn.InstanceNorm2d(out_channels, affine=True),
-            nn.LeakyReLU(0.2)
+            nn.LeakyReLU(0.2),
         )
 
     def forward(self, tensor: torch.Tensor):
@@ -35,22 +41,30 @@ class Generator(nn.Module):
     def __init__(self, z_dim, channels_image, dim):
         super().__init__()
         self.main = nn.Sequential(
-            self._block(z_dim, dim * 16, 4, 1, 0),      # 4x4
-            self._block(dim * 16, dim * 8, 4, 2, 1),    # 8x8
-            self._block(dim * 8, dim * 4, 4, 2, 1),     # 16x16
-            self._block(dim * 4, dim * 2, 4, 2, 1),     # 32x32
-            nn.ConvTranspose2d(dim * 2, channels_image, kernel_size=4,
-                               stride=2, padding=1, bias=False),
+            self._block(z_dim, dim * 16, 4, 1, 0),  # 4x4
+            self._block(dim * 16, dim * 8, 4, 2, 1),  # 8x8
+            self._block(dim * 8, dim * 4, 4, 2, 1),  # 16x16
+            self._block(dim * 4, dim * 2, 4, 2, 1),  # 32x32
+            nn.ConvTranspose2d(
+                dim * 2, channels_image, kernel_size=4, stride=2, padding=1, bias=False
+            ),
             nn.Tanh(),
         )
 
-    def _block(self, in_channels: int, out_channels: int,
-               kernel_size: int, stride: int, padding: int):
+    def _block(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size: int,
+        stride: int,
+        padding: int,
+    ):
         return nn.Sequential(
-            nn.ConvTranspose2d(in_channels, out_channels, kernel_size,
-                               stride, padding, bias=False),
+            nn.ConvTranspose2d(
+                in_channels, out_channels, kernel_size, stride, padding, bias=False
+            ),
             nn.BatchNorm2d(out_channels),
-            nn.ReLU()
+            nn.ReLU(),
         )
 
     def forward(self, tensor: torch.Tensor):

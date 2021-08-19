@@ -17,20 +17,16 @@ class Discriminator(nn.Module):
             self._block(dim * 4, dim * 2, 4, 2, 1, False, True),
             self._block(dim * 2, dim * 1, 4, 2, 1, False, True),
             nn.ConvTranspose2d(dim * 1, channels_img, 4, 2, 1, bias=False),
-            nn.Tanh()
+            nn.Tanh(),
         )
 
-    def _block(self, in_channels, out_channels,
-               kernel_size, stride, padding, encode, norm):
+    def _block(
+        self, in_channels, out_channels, kernel_size, stride, padding, encode, norm
+    ):
         layers = []
         conv = nn.Conv2d if encode else nn.ConvTranspose2d
         layers.append(
-            conv(in_channels,
-                 out_channels,
-                 kernel_size,
-                 stride,
-                 padding,
-                 bias=False)
+            conv(in_channels, out_channels, kernel_size, stride, padding, bias=False)
         )
         if norm:
             layers.append(nn.BatchNorm2d(out_channels))

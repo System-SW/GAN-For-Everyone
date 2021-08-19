@@ -5,8 +5,8 @@ SEED = 2333
 
 
 class DATASET_MNIST:
-    CAT = 'mnist'
-    DIR = '../dataset/'
+    CAT = "mnist"
+    DIR = "../dataset/"
     IMAGE_SIZE = 28
     IMAGE_CHANNELS = 1
 

@@ -7,28 +7,32 @@ class Discriminator(nn.Module):
         super(Discriminator, self).__init__()
 
         self.disc = nn.Sequential(
-            nn.Conv2d(input_dim + channels_img, dim,
-                      4, 2, 1,
-                      padding_mode='reflect',
-                      bias=False),
+            nn.Conv2d(
+                input_dim + channels_img,
+                dim,
+                4,
+                2,
+                1,
+                padding_mode="reflect",
+                bias=False,
+            ),
             nn.LeakyReLU(0.2),
-
             self._block(dim, dim * 2, 4, 2, 1),
             self._block(dim * 2, dim * 4, 4, 2, 1),
             self._block(dim * 4, dim * 8, 4, 1, 1),
-            nn.Conv2d(dim * 8, 1,
-                      4, 1, 1,
-                      padding_mode='reflect',
-                      bias=False))
+            nn.Conv2d(dim * 8, 1, 4, 1, 1, padding_mode="reflect", bias=False),
+        )
 
-    def _block(self, in_channels, out_channels,
-               kernel_size, stride, padding):
+    def _block(self, in_channels, out_channels, kernel_size, stride, padding):
         return nn.Sequential(
             nn.Conv2d(
-                in_channels, out_channels,
-                kernel_size, stride, padding,
-                padding_mode='reflect',
-                bias=False
+                in_channels,
+                out_channels,
+                kernel_size,
+                stride,
+                padding,
+                padding_mode="reflect",
+                bias=False,
             ),
             nn.BatchNorm2d(out_channels),
             nn.LeakyReLU(0.2),
@@ -39,22 +43,21 @@ class Discriminator(nn.Module):
 
 
 class Block(nn.Module):
-    def __init__(self,
-                 in_channels,
-                 out_channels,
-                 down=True,
-                 act='relu',
-                 use_dropout=False):
+    def __init__(
+        self, in_channels, out_channels, down=True, act="relu", use_dropout=False
+    ):
         super().__init__()
 
         self.conv = nn.Sequential(
-            nn.Conv2d(in_channels=in_channels,
-                      out_channels=out_channels,
-                      kernel_size=4,
-                      stride=2,
-                      padding=1,
-                      bias=False,
-                      padding_mode='reflect')
+            nn.Conv2d(
+                in_channels=in_channels,
+                out_channels=out_channels,
+                kernel_size=4,
+                stride=2,
+                padding=1,
+                bias=False,
+                padding_mode="reflect",
+            )
             if down
             else nn.ConvTranspose2d(
                 in_channels=in_channels,
@@ -62,9 +65,10 @@ class Block(nn.Module):
                 kernel_size=4,
                 stride=2,
                 padding=1,
-                bias=False),
+                bias=False,
+            ),
             nn.BatchNorm2d(out_channels),
-            nn.ReLU() if act == 'relu' else nn.LeakyReLU(0.2)
+            nn.ReLU() if act == "relu" else nn.LeakyReLU(0.2),
         )
 
         self._use_dropout = use_dropout
@@ -79,43 +83,50 @@ class Generator(nn.Module):
     def __init__(self, input_dim, channels_img, dim):
         super(Generator, self).__init__()
         self.initial_down = nn.Sequential(
-            nn.Conv2d(input_dim, dim, 4, 2, 1, padding_mode='reflect'),
+            nn.Conv2d(input_dim, dim, 4, 2, 1, padding_mode="reflect"),
             nn.LeakyReLU(0.2),
         )
 
-        self.down_1 = Block(dim, dim * 2,
-                            down=True, act='leaky', use_dropout=False)  # 64
-        self.down_2 = Block(dim * 2, dim * 4,
-                            down=True, act='leaky', use_dropout=False)  # 32
-        self.down_3 = Block(dim * 4, dim * 8,
-                            down=True, act='leaky', use_dropout=False)  # 16
-        self.down_4 = Block(dim * 8, dim * 8,
-                            down=True, act='leaky', use_dropout=False)  # 8
-        self.down_5 = Block(dim * 8, dim * 8,
-                            down=True, act='leaky', use_dropout=False)  # 4
-        self.down_6 = Block(dim * 8, dim * 8,
-                            down=True, act='leaky', use_dropout=False)  # 2
+        self.down_1 = Block(
+            dim, dim * 2, down=True, act="leaky", use_dropout=False
+        )  # 64
+        self.down_2 = Block(
+            dim * 2, dim * 4, down=True, act="leaky", use_dropout=False
+        )  # 32
+        self.down_3 = Block(
+            dim * 4, dim * 8, down=True, act="leaky", use_dropout=False
+        )  # 16
+        self.down_4 = Block(
+            dim * 8, dim * 8, down=True, act="leaky", use_dropout=False
+        )  # 8
+        self.down_5 = Block(
+            dim * 8, dim * 8, down=True, act="leaky", use_dropout=False
+        )  # 4
+        self.down_6 = Block(
+            dim * 8, dim * 8, down=True, act="leaky", use_dropout=False
+        )  # 2
 
         self.bottleneck = nn.Sequential(
-            nn.Conv2d(dim * 8, dim * 8, 4,
-                      2, 1, padding_mode='reflect'),
-            nn.ReLU()
+            nn.Conv2d(dim * 8, dim * 8, 4, 2, 1, padding_mode="reflect"), nn.ReLU()
         )
 
-        self.up_1 = Block(dim * 8, dim * 8,
-                          down=False, act='relu', use_dropout=True)
-        self.up_2 = Block(dim * 8 * 2, dim * 8,
-                          down=False, act='relu', use_dropout=True)
-        self.up_3 = Block(dim * 8 * 2, dim * 8,
-                          down=False, act='relu', use_dropout=True)
-        self.up_4 = Block(dim * 8 * 2, dim * 8,
-                          down=False, act='relu', use_dropout=False)
-        self.up_5 = Block(dim * 8 * 2, dim * 4,
-                          down=False, act='relu', use_dropout=False)
-        self.up_6 = Block(dim * 4 * 2, dim * 2,
-                          down=False, act='relu', use_dropout=False)
-        self.up_7 = Block(dim * 2 * 2, dim,
-                          down=False, act='relu', use_dropout=False)
+        self.up_1 = Block(dim * 8, dim * 8, down=False, act="relu", use_dropout=True)
+        self.up_2 = Block(
+            dim * 8 * 2, dim * 8, down=False, act="relu", use_dropout=True
+        )
+        self.up_3 = Block(
+            dim * 8 * 2, dim * 8, down=False, act="relu", use_dropout=True
+        )
+        self.up_4 = Block(
+            dim * 8 * 2, dim * 8, down=False, act="relu", use_dropout=False
+        )
+        self.up_5 = Block(
+            dim * 8 * 2, dim * 4, down=False, act="relu", use_dropout=False
+        )
+        self.up_6 = Block(
+            dim * 4 * 2, dim * 2, down=False, act="relu", use_dropout=False
+        )
+        self.up_7 = Block(dim * 2 * 2, dim, down=False, act="relu", use_dropout=False)
 
         self.final_up = nn.Sequential(
             nn.ConvTranspose2d(
@@ -124,7 +135,7 @@ class Generator(nn.Module):
                 kernel_size=4,
                 stride=2,
                 padding=1,
-                bias=False
+                bias=False,
             ),
             nn.Tanh(),
         )
@@ -155,12 +166,12 @@ def initialize_weights(model):
             nn.init.normal_(m.weight.data, 0.0, 0.02)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x = torch.randn(1, 3, 256, 256)
     y = torch.randn(1, 3, 256, 256)
     D = Discriminator(3, 64)
     G = Generator(3, 64)
     preds = G(x)
-    print('G: ', preds.shape)
+    print("G: ", preds.shape)
     preds = D(preds, y)
-    print('D: ', preds.shape)
+    print("D: ", preds.shape)
