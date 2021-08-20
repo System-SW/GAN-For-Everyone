@@ -7,14 +7,14 @@ from torch.utils import data
 from torch.utils.data import DataLoader
 
 
-class CelabADataset(data.Dataset):
-    def __init__(self, dataset, ext_cndidates=["jpg", "png", "bmp"]):
+class CelebADataset(data.Dataset):
+    def __init__(self, dataset, ext_candidates=["jpg", "png", "bmp"]):
 
         self.image_paths = []
 
         for root, dirs, files in os.walk(dataset.DIR):
             for filename in files:
-                if os.path.splitext(filename)[1].lower()[1:] in ext_cndidates:
+                if os.path.splitext(filename)[1].lower()[1:] in ext_candidates:
                     self.image_paths.append(os.path.join(root, filename))
 
         self.transform = transforms.Compose(
@@ -57,7 +57,7 @@ class Dataset:
     def __init__(self, dataset) -> None:
         DATASET = {
             "mnist": MnistDataset,
-            "celaba": CelabADataset,
+            "celebs": CelebADataset,
         }
 
         print(f"{dataset.CAT.upper()} Dataset")
