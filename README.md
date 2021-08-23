@@ -11,6 +11,7 @@
  | [EBGAN](./EBGAN/README.md)       | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
  | [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
  | [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
+ | [SRGAN](./SRGAN/README.md) | 2016 | [PDF](./SRGAN/src/paper-paper-SRGAN.pdf)      | **Code Done** |
 
 # **Environment**
 
