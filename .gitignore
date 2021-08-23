@@ -1,7 +1,8 @@
-
 # VSCODE
 .vscode/
 
+# TEMPLATE
+GAN_TEMPLATE/
 # CACHE
 __pycache__/
 
