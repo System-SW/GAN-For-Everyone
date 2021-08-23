@@ -50,14 +50,44 @@ class MnistDataset(datasets.MNIST):
                 ),
             ]
         )
-        super().__init__(dataset.DIR, transform=transform, download=True)
+        super().__init__(dataset.DIR, transform=transform, download=True,train=True)
+
+class Cifar10Dataset(datasets.CIFAR10):
+    def __init__(self, dataset) -> None:
+        transform = transforms.Compose(
+            [
+                transforms.Resize((dataset.IMAGE_SIZE, dataset.IMAGE_SIZE)),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)],
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)],
+                ),
+            ]
+        )
+        super().__init__(dataset.DIR, transform=transform, download=True,train=True)
+
+class FashionMNISTDataset(datasets.FashionMNIST):
+    def __init__(self, dataset) -> None:
+        transform = transforms.Compose(
+            [
+                transforms.Resize((dataset.IMAGE_SIZE, dataset.IMAGE_SIZE)),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)],
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)],
+                ),
+            ]
+        )
+        super().__init__(dataset.DIR, transform=transform, download=True,train=True)
 
 
 class Dataset:
     def __init__(self, dataset) -> None:
         DATASET = {
             "mnist": MnistDataset,
+            "fmnist": FashionMNISTDataset,
             "celebs": CelebADataset,
+            "cifar10": Cifar10Dataset,
         }
 
         print(f"{dataset.CAT.upper()} Dataset")
