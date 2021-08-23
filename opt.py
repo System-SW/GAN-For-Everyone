@@ -42,7 +42,7 @@ class Template(metaclass=ABCMeta):
     def test(self):
         ...
 
-    def save_checkopint(self, gen, disc, opt_gen, opt_disc, epoch=0):
+    def save_checkpoint(self, gen, disc, opt_gen, opt_disc, epoch=0):
 
         checkpoint = {
             "gen_state_dict": gen.state_dict(),
@@ -54,15 +54,15 @@ class Template(metaclass=ABCMeta):
         torch.save(checkpoint, save_path)
         print(f"Epoch:{epoch+1} ckpt save => {save_path}")
 
-    def restore_checkopint(self, cktp_path, gen, disc, opt_gen, opt_disc, lr):
+    def restore_checkpoint(self, ckpt_path, gen, disc, opt_gen, opt_disc, lr):
 
-        if cktp_path is None:
+        if ckpt_path is None:
             return -1
 
-        if not os.path.exists(cktp_path):
+        if not os.path.exists(ckpt_path):
             return -1
 
-        ckpt = torch.load(cktp_path, map_location=self.device)
+        ckpt = torch.load(ckpt_path, map_location=self.device)
 
         gen.load_state_dict(ckpt["gen_state_dict"])
         opt_gen.load_state_dict(ckpt["opt_gen"])
@@ -75,4 +75,4 @@ class Template(metaclass=ABCMeta):
         for pg in opt_disc.param_groups:
             pg["lr"] = lr
 
-        print("Restore Ckpt FROM :", cktp_path)
+        print("Restore Ckpt FROM :", ckpt_path)
