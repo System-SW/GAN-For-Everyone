@@ -12,6 +12,7 @@
  | [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
  | [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
  | [SRGAN](./SRGAN/README.md) | 2016 | [PDF](./SRGAN/src/paper-paper-SRGAN.pdf)      | **Code Done** |
+ | [ACGAN](./ACGAN/README.md) | 2016 | [PDF](./ACGAN/src/paper-paper-ACGAN.pdf)      | **Code Done** |
 
 # **Environment**
 
@@ -74,9 +75,9 @@ RepoRootPath
 │   ├── dataset.py          # link to root dir's dataset.py (*)
 │   └── opt.py              # link to root dir's opt.py (*)
 ├── DCGAN                   # 구현된 모델(구현체)
-├── MyAwesomModel           # 구현된 모델(구현체)
+├── MyAwesomeModel           # 구현된 모델(구현체)
 ├── README.md
-├── ... ETCs
+├── ... Etc
 ```
 
 ## 2. Template Meta
@@ -124,9 +125,9 @@ class Template(metaclass=ABCMeta):
 ```python
 # 새로운 모델 구현 예시 (train.py)
 import hyperparameters as hp
-class MyAwesomModelTrainer(Template):
+class MyAwesomeModelTrainer(Template):
     def __init__(self):
-        super().__init__(hp,'MyAwesomModel')
+        super().__init__(hp,'MyAwesomeModel')
         ...
     def train(self):
         ...
@@ -135,7 +136,7 @@ class MyAwesomModelTrainer(Template):
 
 if __name__ == '__main__':
     # train.py에 main 작성
-    trainer = MyAwesomModelTrainer()
+    trainer = MyAwesomeModelTrainer()
     trainer.train()
 ```
 
@@ -152,7 +153,7 @@ you@server:~$ pip install requirements.txt
 ```bash
 you@server:~$ pwd
 [RepoRootPath]
-you@server:~$ cd MyAwesomModel # 원하는 모델 디렉터리로 이동
+you@server:~$ cd MyAwesomeModel # 원하는 모델 디렉터리로 이동
 you@server:~$ python train.py  # 학습자 실행
 ```
 
@@ -160,6 +161,6 @@ you@server:~$ python train.py  # 학습자 실행
 
 ```bash
 you@server:~$ pwd
-[RepoRootPath]/MyAwesomModel
+[RepoRootPath]/MyAwesomeModel
 you@server:~$ tensorboard --bind_all --logdir log/MyAwesomModel/[**TimeStamp**]
 ```
