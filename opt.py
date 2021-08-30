@@ -151,7 +151,7 @@ class Template(metaclass=ABCMeta):
             weight (bool, optional): [bool]. Defaults to True. weight logging flag
             gradient (bool, optional): [bool]. Defaults to True. grad logging flag
         """
-        if weight or gradient == False:
+        if weight == False and gradient == False:
             return -1
 
         for i, (name, p) in enumerate(model.named_parameters()):
