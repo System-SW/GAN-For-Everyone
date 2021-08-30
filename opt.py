@@ -8,6 +8,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 from torch.utils import tensorboard
+import collections
 
 
 class Template(metaclass=ABCMeta):
@@ -163,3 +164,51 @@ class Template(metaclass=ABCMeta):
                     self.tb.add_histogram(f"{model_name}_g/{i}_{name}", g, itr)
             except ValueError:
                 pass
+
+
+class Metrics:
+    """mean metrics class for logging scaler"""
+
+    __slots__ = ["name", "_container"]
+
+    def __init__(self, name: str):
+        """metrics initializer
+        Args:
+            name (str): metrics object name tag
+
+        container is float list
+        """
+        self.name = name
+        self._container = list()
+
+    def reset_state(self):
+        """clear container"""
+        self._container.clear()
+
+    def update_state(self, data: any):
+        """append data in container
+
+        Args:
+            data (torch.Tensor | float): logging data
+        """
+        if isinstance(data, torch.Tensor):
+            data = data.item()
+        self._container.append(data)
+
+    def result(self) -> float:
+        """calculate container and return
+
+        Returns:
+            [float]: calculated(mean) logging data
+        """
+        return np.mean(self._container)
+
+    def result_and_reset(self) -> float:
+        """calculate container and reset
+
+        Returns:
+            [float]: calculated(mean) logging data
+        """
+        data = self.result()
+        self.reset_state()
+        return data
