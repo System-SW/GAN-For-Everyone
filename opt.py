@@ -181,6 +181,11 @@ class Template(metaclass=ABCMeta):
             except ValueError:
                 pass
 
+    @torch.no_grad()
+    def logging_scaler(self, metrics, reset=True):
+        data = metrics.result_and_reset() if reset else metrics.result()
+        self.tb.add_scalar(metrics.name, data, self.itr)
+        return data
 
 class Metrics:
     """mean metrics class for logging scaler"""
