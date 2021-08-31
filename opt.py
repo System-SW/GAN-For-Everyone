@@ -187,6 +187,10 @@ class Template(metaclass=ABCMeta):
         self.tb.add_scalar(metrics.name, data, self.itr)
         return data
 
+    @staticmethod
+    def generate_latent_vactor(batch: int, dim: int, device: torch.device):
+
+
 class Metrics:
     """mean metrics class for logging scaler"""
 
