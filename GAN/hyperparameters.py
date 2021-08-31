@@ -1,12 +1,13 @@
 import torch
+from dataset import *
 
-DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+DEVICE = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 SEED = 2333
 
 
 class DATASET_MNIST:
-    CAT = "mnist"
-    DIR = "../dataset/"
+    DS = MnistDataset
+    DIR = "../DATASET/"
     IMAGE_SIZE = 28
     IMAGE_CHANNELS = 1
 
@@ -16,10 +17,14 @@ IMAGE_SIZE = DATASET.IMAGE_SIZE
 IMAGE_CHANNELS = DATASET.IMAGE_CHANNELS
 
 BATCH_SIZE = 64
+SAMPLE_SIZE = 64
 LR = 3e-4
-Z_DIM = 64
+NOISE_DIM = 128
 NUM_EPOCHS = 50
-SAMPLE_SIZE = 32
+
+LOG_WIGHT = True
+LOG_GRADIENT = True
 
 LOG_INTERVAL = 10
 TEST_INTERVAL = 100
+LOG_HISTOGRAM_INTERVAL = 100
