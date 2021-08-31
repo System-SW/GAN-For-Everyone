@@ -5,10 +5,9 @@ from abc import ABCMeta, abstractmethod
 
 import numpy as np
 import torch
+import torchvision
 from torch import nn
-import torch.nn.functional as F
 from torch.utils import tensorboard
-import collections
 
 
 class Template(metaclass=ABCMeta):
@@ -49,10 +48,28 @@ class Template(metaclass=ABCMeta):
         """Model Train Methods"""
         ...
 
-    @abstractmethod
-    def test(self):
-        """Model TEST Methods"""
-        ...
+    def test(
+        self, gen: nn.Module, real: torch.Tensor, fixed_noise: torch.Tensor
+    ) -> torch.Tensor:
+        """Base TEST Method, if u need change override this method
+
+        Args:
+            gen (nn.Module): generator
+            real (torch.Tenser): real data batch
+            fixed_noise (torch.Tensor): fixed latent vector
+
+        Returns:
+            [Torch.Tensor]: generated fake image tensor
+        """
+        gen.eval()
+        fake = gen(fixed_noise)
+        nrow = int(fixed_noise.shape[0] ** 0.5)
+        img_grid_fake = torchvision.utils.make_grid(fake, nrow, normalize=True)
+        img_grid_real = torchvision.utils.make_grid(real, nrow, normalize=True)
+        self.tb.add_image("Fake Images", img_grid_fake, global_step=self.itr)
+        self.tb.add_image("Real Images", img_grid_real, global_step=self.itr)
+        gen.train()
+        return img_grid_fake
 
     @staticmethod
     def save_checkpoint(
@@ -142,7 +159,6 @@ class Template(metaclass=ABCMeta):
         weight=True,
         gradient=True,
     ):
-
         """logging gradients
         Args:
             model_name (str): Model name ex) Gen/Disc
