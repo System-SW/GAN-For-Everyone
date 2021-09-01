@@ -5,16 +5,20 @@ import torchvision
 from tqdm import tqdm
 
 import hyperparameters as hp
-from dataset import Dataset
+from dataset import DataLoader
 from model import Discriminator, Generator, initialize_weights
-from opt import Template
+from opt import Template, Metrics
 
 
 class DCGAN(Template):
     def __init__(self):
-        super().__init__(device=hp.DEVICE, seed=hp.SEED, model_name="DCGAN")
+        super().__init__(
+            device=hp.DEVICE,
+            seed=hp.SEED,
+            model_name=self.__class__.__name__,
+        )
 
-        self.dataset = Dataset(hp.DATASET)
+        self.dataloader = DataLoader(hp.DATASET)
         self.gen = Generator(hp.NOISE_DIM, hp.IMAGE_CHANNELS, hp.GEN_DIM).to(
             self.device
         )
@@ -22,7 +26,9 @@ class DCGAN(Template):
         initialize_weights(self.gen)
         initialize_weights(self.disc)
 
-        self.FIXED_NOISE = torch.randn(32, hp.NOISE_DIM, 1, 1, device=self.device)
+        self.FIXED_NOISE = torch.randn(
+            hp.SAMPLE_SIZE, hp.NOISE_DIM, 1, 1, device=self.device
+        )
         # optimizer
         self.opt_gen = optim.Adam(
             self.gen.parameters(), lr=hp.LEARNING_RATE, betas=hp.BETAS
@@ -35,8 +41,15 @@ class DCGAN(Template):
         self.scaler_dis = torch.cuda.amp.GradScaler()
         self.bce_loss = nn.BCEWithLogitsLoss()
 
+        self.real_prob = Metrics("TRAIN/Real Prob")
+        self.fake_prob = Metrics("TRAIN/Fake Prob")
+        self.lossD_real = Metrics("TRAIN/lossD_real")
+        self.lossD_fake = Metrics("TRAIN/lossD_fake")
+        self.lossD = Metrics("TRAIN/lossD")
+        self.lossG = Metrics("TRAIN/lossG")
+
     def train(self):
-        loader = self.dataset.create_dataloader(hp.BATCH_SIZE)
+        loader, _ = self.dataloader.create_dataloader(hp.BATCH_SIZE, hp.SAMPLE_SIZE)
         self.gen.train()
         self.disc.train()
 
@@ -44,10 +57,12 @@ class DCGAN(Template):
         for epoch in range(hp.NUM_EPOCHS):
             pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (real, _) in pbar:
+                self.itr += 1
                 real = real.to(self.device)
                 batch_size = real.shape[0]
                 noise = torch.randn(batch_size, hp.NOISE_DIM, 1, 1, device=self.device)
 
+                # Train Discriminator
                 with torch.cuda.amp.autocast():
                     fake = self.gen(noise)
                     disc_real = self.disc(real).reshape(-1)
@@ -71,38 +86,39 @@ class DCGAN(Template):
                 self.scaler_gen.step(self.opt_gen)
                 self.scaler_gen.update()
 
-                with torch.no_grad():
-                    if batch_idx % hp.LOG_INTERVAL == 0:
-                        self.tb.add_scalar(
-                            "TRAIN/Real Prob",
-                            self.gan_prob(disc_real).item(),
-                            global_step=self.itr,
-                        )
-                        self.tb.add_scalar(
-                            "TRAIN/Fake Prob",
-                            self.gan_prob(disc_fake).item(),
-                            global_step=self.itr,
-                        )
+                # Logging
+                self.real_prob.update_state(self.gan_prob(disc_real))
+                self.fake_prob.update_state(self.gan_prob(disc_fake))
+                self.lossD_real.update_state(lossD_real)
+                self.lossD_fake.update_state(lossD_fake)
+                self.lossD.update_state(lossD)
+                self.lossG.update_state(lossG)
 
-                    if batch_idx % hp.TEST_INTERVAL == 0:
-                        pbar.set_description_str(
-                            f"Epoch[{epoch+1} / {hp.NUM_EPOCHS}], "
-                            f"real:{self.gan_prob(disc_real).item(): .2f}, "
-                            f"fake:{self.gan_prob(disc_fake).item(): .2f}, "
-                            f"lossD:{lossD.item(): .2f}, "
-                            f"lossG:{lossG.item(): .2f} "
-                        )
-                        self.test(real)
-                self.itr += 1
+                if batch_idx % hp.LOG_INTERVAL == 0:
+                    real_prob = self.logging_scaler(self.real_prob)
+                    fake_prob = self.logging_scaler(self.fake_prob)
+                    lossD_real = self.logging_scaler(self.lossD_real)
+                    lossD_fake = self.logging_scaler(self.lossD_fake)
+                    lossD = self.logging_scaler(self.lossD)
+                    lossG = self.logging_scaler(self.lossG)
+                    pbar.set_description_str(
+                        f"Epoch[{epoch+1} / {hp.NUM_EPOCHS}], "
+                        f"real:{real_prob: .2f}, "
+                        f"fake:{fake_prob: .2f}, "
+                        f"lossD:{lossD: .2f}, "
+                        f"lossG:{lossG: .2f} "
+                    )
+                if batch_idx % hp.TEST_INTERVAL == 0:
+                    self.test(self.gen, real[: hp.SAMPLE_SIZE], self.FIXED_NOISE)
 
-    def test(self, real):
-        self.gen.eval()
-        fake = self.gen(self.FIXED_NOISE)
-        img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
-        img_grid_real = torchvision.utils.make_grid(real[:32], normalize=True)
-        self.tb.add_image("Fake Images", img_grid_fake, global_step=self.itr)
-        self.tb.add_image("Real Images", img_grid_real, global_step=self.itr)
-        self.gen.train()
+            self.logging_weight_and_gradient("GEN", self.gen, self.itr)
+            self.logging_weight_and_gradient("DISC", self.disc, self.itr)
+
+            test_image = self.test(self.gen, real[: hp.SAMPLE_SIZE], self.FIXED_NOISE)
+            self.save_image_to_logdir(test_image, epoch + 1)
+            self.save_checkpoint(
+                self.gen, self.disc, self.opt_gen, self.opt_disc, epoch + 1
+            )
 
 
 if __name__ == "__main__":
