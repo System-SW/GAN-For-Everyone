@@ -187,8 +187,26 @@ class Template(metaclass=ABCMeta):
         self.tb.add_scalar(metrics.name, data, self.itr)
         return data
 
-    @staticmethod
-    def generate_latent_vactor(batch: int, dim: int, device: torch.device):
+    def save_image_to_logdir(
+        self, image: torch.Tensor, epoch: int, image_format="JPEG"
+    ) -> None:
+        """torchvision save_image wrapper
+        image save to tensorboard log dir
+
+        Args:
+            image (torch.Tensor): image tensor
+            epoch (int): currunt epoch number
+            image_format (str, optional): save image format check "https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html". Defaults to "JPEG".
+
+        Example:
+            tensorboard logdir is my_log_dir
+            self.save_image_to_logdir(image_tensor,0)
+            image save fp is 'my_log_dir/image/{trainer_class_name}_E:0000.jpg'
+        """
+        fp = os.path.join(
+            self.image_dir, f"{self.__class__.__name__}_E:{str(epoch).zfill(4)}.jpg"
+        )
+        torchvision.utils.save_image(image, fp, image_format)
 
 
 class Metrics:
