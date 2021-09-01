@@ -96,9 +96,14 @@ class GAN(Template):
                     )
 
                 if batch_idx == 0:
-                    self.logging_weight_and_gradient("GEN", self.gen, self.itr)
-                    self.logging_weight_and_gradient("DISC", self.disc, self.itr)
-                    self.test(real[: hp.SAMPLE_SIZE], FIXED_NOISE)
+                    test_image = self.test(real[: hp.SAMPLE_SIZE], FIXED_NOISE)
+
+            self.logging_weight_and_gradient("GEN", self.gen, self.itr)
+            self.logging_weight_and_gradient("DISC", self.disc, self.itr)
+            self.save_image_to_logdir(test_image, epoch + 1)
+            self.save_checkpoint(
+                self.gen, self.disc, self.opt_gen, self.opt_disc, epoch + 1
+            )
 
     @torch.no_grad()
     def test(self, real, fixed_noise):
