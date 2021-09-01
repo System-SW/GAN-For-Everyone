@@ -5,16 +5,20 @@ import torchvision
 from tqdm import tqdm
 
 import hyperparameters as hp
-from dataset import Dataset
+from dataset import DataLoader
 from model import Critic, Generator, initialize_weights
-from opt import Template
+from opt import Metrics, Template
 
 
 class WGAN_GP(Template):
     def __init__(self):
-        super().__init__(device=hp.DEVICE, seed=hp.SEED, model_name="WGAN-GP")
+        super().__init__(
+            device=hp.DEVICE,
+            seed=hp.SEED,
+            model_name=self.__class__.__name__,
+        )
 
-        self.dataset = Dataset(hp.DATASET)
+        self.dataloader = DataLoader(hp.DATASET)
         self.gen = Generator(hp.NOISE_DIM, hp.IMAGE_CHANNELS, hp.GEN_DIM).to(
             self.device
         )
@@ -22,17 +26,17 @@ class WGAN_GP(Template):
         initialize_weights(self.gen)
         initialize_weights(self.critic)
 
-        self.FIXED_NOISE = torch.randn(32, hp.NOISE_DIM, 1, 1, device=self.device)
         # optimizer
         self.opt_gen = optim.Adam(
             self.gen.parameters(), lr=hp.LEARNING_RATE, betas=hp.BETAS
         )
-        self.opt_disc = optim.Adam(
+        self.opt_critic = optim.Adam(
             self.critic.parameters(), lr=hp.LEARNING_RATE, betas=hp.BETAS
         )
 
-        # self.scaler_gen = torch.cuda.amp.GradScaler()
-        # self.scaler_critic = torch.cuda.amp.GradScaler()
+        self.loss_critic = Metrics("TRAIN/Critic loss")
+        self.lossG = Metrics("TRAIN/Generator loss")
+        self.gp = Metrics("TRAIN/Critic gradient penalty")
 
     def gradient_penalty(self, real, fake):
         BATCH_SIZE, C, H, W = real.shape
@@ -53,7 +57,10 @@ class WGAN_GP(Template):
         return torch.mean((gradient_norm - 1) ** 2)
 
     def train(self):
-        loader = self.dataset.create_dataloader(hp.BATCH_SIZE)
+        loader, _ = self.dataloader.create_dataloader(hp.BATCH_SIZE, hp.SAMPLE_SIZE)
+        FIXED_NOISE = torch.randn(
+            hp.SAMPLE_SIZE, hp.NOISE_DIM, 1, 1, device=self.device
+        )
         self.gen.train()
         self.critic.train()
 
@@ -61,6 +68,7 @@ class WGAN_GP(Template):
         for epoch in range(hp.NUM_EPOCHS):
             pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (real, _) in pbar:
+                self.itr += 1
                 real = real.to(self.device)
                 batch_size = real.shape[0]
 
@@ -80,7 +88,7 @@ class WGAN_GP(Template):
                     )
                     self.critic.zero_grad()
                     loss_critic.backward(retain_graph=True)
-                    self.opt_disc.step()
+                    self.opt_critic.step()
 
                 # Train Generator
                 output = self.critic(fake).reshape(-1)
@@ -90,37 +98,43 @@ class WGAN_GP(Template):
                 lossG.backward()
                 self.opt_gen.step()
 
-                with torch.no_grad():
-                    if batch_idx % hp.LOG_INTERVAL == 0:
-                        self.tb.add_scalar(
-                            "TRAIN/Critic loss", -loss_critic, global_step=self.itr
-                        )
-                        self.tb.add_scalar(
-                            "TRAIN/Generator loss", lossG, global_step=self.itr
-                        )
-                        self.tb.add_scalar(
-                            "TRAIN/Critic gradient penalty",
-                            gradient_penalty,
-                            global_step=self.itr,
-                        )
+                # Logging
+                self.loss_critic.update_state(loss_critic)
+                self.lossG.update_state(lossG)
+                self.gp.update_state(gradient_penalty)
 
-                    if batch_idx % hp.TEST_INTERVAL == 0:
-                        pbar.set_description_str(
-                            f"Epoch[{epoch+1} / {hp.NUM_EPOCHS}], "
-                            f"lossD:{loss_critic.item(): .2f}, "
-                            f"GP:{gradient_penalty.item(): .2f} "
-                        )
-                        self.test(real)
-                self.itr += 1
+                if batch_idx % hp.LOG_INTERVAL == 0:
+                    loss_critic = self.logging_scaler(self.loss_critic)
+                    lossG = self.logging_scaler(self.lossG)
+                    gradient_penalty = self.logging_scaler(self.gp)
+                    pbar.set_description_str(
+                        f"Epoch[{epoch+1} / {hp.NUM_EPOCHS}], "
+                        f"lossD:{loss_critic: .2f}, "
+                        f"lossG:{lossG: .2f}, "
+                        f"GP:{gradient_penalty: .2f} "
+                    )
+                if batch_idx % hp.TEST_INTERVAL == 0:
+                    self.test(self.gen, real[: hp.SAMPLE_SIZE], FIXED_NOISE)
+            # Epoch process
+            self.logging_weight_and_gradient("GEN", self.gen, self.itr)
+            self.logging_weight_and_gradient("CRITIC", self.critic, self.itr)
 
-    def test(self, real):
-        self.gen.eval()
-        fake = self.gen(self.FIXED_NOISE)
-        img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
-        img_grid_real = torchvision.utils.make_grid(real[:32], normalize=True)
-        self.tb.add_image("Fake Images", img_grid_fake, global_step=self.itr)
-        self.tb.add_image("Real Images", img_grid_real, global_step=self.itr)
-        self.gen.train()
+            test_image = self.test(self.gen, real[: hp.SAMPLE_SIZE], FIXED_NOISE)
+            self.save_image_to_logdir(test_image, epoch + 1)
+
+            self.save_checkpoint(
+                self.gen, self.critic, self.opt_gen, self.opt_critic, epoch + 1
+            )
+
+    @torch.no_grad()
+    def add_scaler(self, loss_critic, lossG, gradient_penalty):
+        loss_critic = loss_critic.item()
+        lossG = lossG.item()
+        gradient_penalty = gradient_penalty.item()
+        self.tb.add_scalar("TRAIN/Critic loss", -loss_critic, self.itr)
+        self.tb.add_scalar("TRAIN/Generator loss", lossG, self.itr)
+        self.tb.add_scalar("TRAIN/Critic gradient penalty", gradient_penalty, self.itr)
+        return loss_critic, lossG, gradient_penalty
 
 
 if __name__ == "__main__":
