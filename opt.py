@@ -96,7 +96,7 @@ class Template(metaclass=ABCMeta):
         }
         save_path = os.path.join("checkpoint.pth.tar")
         torch.save(checkpoint, save_path)
-        print(f"Epoch:{epoch+1} ckpt save => {save_path}")
+        print(f"Epoch:{epoch} ckpt save => {save_path}")
 
     @staticmethod
     def restore_checkpoint(
