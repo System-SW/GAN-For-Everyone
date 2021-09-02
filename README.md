@@ -1,29 +1,29 @@
 # **Table of GANs**
 
- | Model                            | Year | Paper                                         | State         |
- | :------------------------------- | ---- | --------------------------------------------- | ------------- |
- | [GAN](./GAN/src/README.pdf)      | 2014 | [PDF](./GAN/src/paper_GAN.pdf)                | Done          |
- | [cGAN](./cGAN/README.md)         | 2014 | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
- | [DCGAN](./DCGAN/README.md)       | 2016 | [PDF](./DCGAN/src/paper-DCGAN.pdf)            | Done          |
- | [WGAN](./WGAN/README.md)         | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)              | Done          |
- | [WGAN-GP](./WGAN-GP/README.md)   | 2017 | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf)        | **Code Done** |
- | [LSGAN](./LSGAN/README.md)       | 2017 | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
- | [EBGAN](./EBGAN/README.md)       | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
- | [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
- | [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
- | [SRGAN](./SRGAN/README.md) | 2016 | [PDF](./SRGAN/src/paper-paper-SRGAN.pdf)      | **Code Done** |
- | [ACGAN](./ACGAN/README.md) | 2016 | [PDF](./ACGAN/src/paper-paper-ACGAN.pdf)      | **Code Done** |
+| Model                            | Year | Paper                                         | State         |
+| :------------------------------- | ---- | --------------------------------------------- | ------------- |
+| [GAN](./GAN/src/README.pdf)      | 2014 | [PDF](./GAN/src/paper_GAN.pdf)                | Done          |
+| [cGAN](./cGAN/README.md)         | 2014 | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
+| [DCGAN](./DCGAN/README.md)       | 2016 | [PDF](./DCGAN/src/paper-DCGAN.pdf)            | Done          |
+| [WGAN](./WGAN/README.md)         | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)              | Done          |
+| [WGAN-GP](./WGAN-GP/README.md)   | 2017 | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf)        | **Code Done** |
+| [LSGAN](./LSGAN/README.md)       | 2017 | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
+| [EBGAN](./EBGAN/README.md)       | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
+| [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
+| [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
+| [SRGAN](./SRGAN/README.md)       | 2016 | [PDF](./SRGAN/src/paper-paper-SRGAN.pdf)      | **Code Done** |
+| [ACGAN](./ACGAN/README.md)       | 2016 | [PDF](./ACGAN/src/paper-paper-ACGAN.pdf)      | **Code Done** |
 
 # **Environment**
 
 ```swift
-OS: Ubuntu 20.04 LTS x86_64 
-Kernel: 5.4.0-80-generic 
-Shell: zsh 5.8 
-CPU: Intel i9-10980XE (36) @ 4.800GHz 
-GPU 00: NVIDIA RTX-3090 NVIDIA Corporation Device 2204 
-GPU 01: NVIDIA RTX-3090 NVIDIA Corporation Device 2204 
-Memory: 128512MiB 
+OS: Ubuntu 20.04 LTS x86_64
+Kernel: 5.4.0-80-generic
+Shell: zsh 5.8
+CPU: Intel i9-10980XE (36) @ 4.800GHz
+GPU 00: NVIDIA RTX-3090 NVIDIA Corporation Device 2204
+GPU 01: NVIDIA RTX-3090 NVIDIA Corporation Device 2204
+Memory: 128512MiB
 ```
 
 # **Requirements**
@@ -39,8 +39,8 @@ Memory: 128512MiB
 # **Tutorial**
 
 - [Repository Rules](./Rules.md)
-- [Anaconda CUDA Env install (Local)](./Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
-- [Anaconda CUDA Env install (Docker)](./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md)
+- [Anaconda CUDA Env install (Local)](<./Tutorial/Anaconda%20CUDA%20Env%20install(local).md>)
+- [Anaconda CUDA Env install (Docker)](<./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md>)
 - [Useful Tools](./Tutorial/Tools.md)
 - [AMP(Automatic Mixed Precision) package](https://pytorch.org/docs/stable/notes/amp_examples.html)
 - [Kaggle API(Dataset Download)](./Tutorial/Kaggle%20cli%20tool.md)
