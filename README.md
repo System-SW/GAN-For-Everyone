@@ -58,24 +58,24 @@ Memory: 128512MiB
 각 구현체의 경우 디렉터리로 구분되어 있으며 각 구현체 디렉터리의 경우 아래와 같은 구조를 기본으로 합니다. 별도의 구성요소가 포함되면 각 구현체 README.md에 설명을 포함합니다.
 
 ```bash
-# (option   : 학습 과정 중 생성
+# (option)  : 학습 과정 중 생성
 # (*)       : 학습에 꼭 필요 혹은 기본 구성요소
 RepoRootPath
-│── opt.py                  # Template class 와 같은 부가 요소
-├── dataset.py              # 학습 데이터 전처리(*)
-├── dataset                 # downloaded data dir(option)
+│── opt.py                  # Template class 와 같은 부가 요소 link to MyAwesomeModel's
+├── dataset                 # 학습 데이터 전처리(*) link to MyAwesomeModel's
+├── DATASET                 # downloaded data dir (*)
 ├── GAN                     # 구현된 모델(구현체)
-│   ├── log                 # log dir(option)
-│   ├── log.tar.gz          # 비교를 위한 사전 학습 로그 (option)
-│   ├── [model paper].pdf   # 구현체 원본 논문(option)
 │   ├── README.md           # 구현체 개별 설명(option)
+│   ├── log                 # log dir(option)
 │   ├── hyperparameters.py  # 학습 파라미터(*)
-│   ├── model.py            # 구현된 모델(*)
+│   ├── model.py or module  # 구현된 모델(*)
 │   ├── train.py            # 구현체 학습자(*)
-│   ├── dataset.py          # link to root dir's dataset.py (*)
-│   └── opt.py              # link to root dir's opt.py (*)
+│   ├── dataset             # link from root dir's dataset (*)
+│   ├── opt.py              # link from root dir's opt.py (*)
+│   ├── src                 
+│   │    └── [paper].pdf    # paper of model
 ├── DCGAN                   # 구현된 모델(구현체)
-├── MyAwesomeModel           # 구현된 모델(구현체)
+├── MyAwesomeModel          # 구현된 모델(구현체)
 ├── README.md
 ├── ... Etc
 ```
@@ -112,8 +112,7 @@ class Template(metaclass=ABCMeta):
         - 대부분의 구현은 여기서 이루어 짐
         """
 
-    @abstractmethod
-    def test(self):
+    def test(self,real):
         """
         Desc:
         - 학습 도중 test/sample 생성을 진행할 메서드
@@ -133,7 +132,7 @@ class MyAwesomeModelTrainer(Template):
         ...
     def test(self):
         ...
-
+    ...
 if __name__ == '__main__':
     # train.py에 main 작성
     trainer = MyAwesomeModelTrainer()
