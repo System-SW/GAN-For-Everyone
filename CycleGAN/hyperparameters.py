@@ -1,24 +1,26 @@
 import torch
+from dataset import *
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 SEED = 2333
+RESTORE_CKPT_PATH = None
 
 
 class DATASET_HZ:
-    CAT = "HZ"
-    DIR = "../dataset/CycleGAN/horse2zebra/horse2zebra/train"
-    VAL_DIR = "../dataset/CycleGAN/horse2zebra/horse2zebra/val"
+    DS = HorseZebraDataset
+    DIR = "../DATASET/CycleGAN/horse2zebra/horse2zebra/train"
+    VAL_DIR = "../DATASET/CycleGAN/horse2zebra/horse2zebra/val"
     IMAGE_SIZE = 256
     INPUT_CHANNELS = 3
-    OUPUT_CHANNELS = 3
+    OUTPUT_CHANNELS = 3
 
 
 DATASET = DATASET_HZ
 IMAGE_SIZE = DATASET.IMAGE_SIZE
 INPUT_CHANNELS = DATASET.INPUT_CHANNELS
-OUTPUT_CHANNELS = DATASET.OUPUT_CHANNELS
+OUTPUT_CHANNELS = DATASET.OUTPUT_CHANNELS
 
-BATCH_SIZE = 1
+BATCH_SIZE = 4
 GEN_DIM = 64
 DISC_DIM = 64
 NUM_RESIDUALS = 9
