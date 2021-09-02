@@ -1,8 +1,5 @@
-from os import sched_getparam
-from typing import Mapping, Sequence
 import torch
 from torch import nn
-from torch.nn.modules import batchnorm
 
 
 class ConvBlock(nn.Module):
@@ -15,7 +12,7 @@ class ConvBlock(nn.Module):
         padding,
         down=True,
         use_act=True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self.block = nn.Sequential(
@@ -27,7 +24,7 @@ class ConvBlock(nn.Module):
                 padding,
                 padding_mode="reflect",
                 bias=False,
-                **kwargs
+                **kwargs,
             )
             if down
             else nn.ConvTranspose2d(
@@ -37,7 +34,7 @@ class ConvBlock(nn.Module):
                 stride,
                 padding,
                 bias=False,
-                **kwargs
+                **kwargs,
             ),
             nn.InstanceNorm2d(out_channels),
             nn.ReLU(inplace=True) if use_act else nn.Identity(),
@@ -72,7 +69,7 @@ class Generator(nn.Module):
             ConvBlock(dim * 2, dim * 4, 3, 2, 1),
         )
 
-        self.rediual_blocks = nn.Sequential(
+        self.residual_blocks = nn.Sequential(
             *[ResidualBlock(dim * 4) for _ in range(num_residuals)]
         )
 
@@ -89,7 +86,7 @@ class Generator(nn.Module):
     def forward(self, x):
         x = self.initial(x)
         x = self.down_blocks(x)
-        x = self.rediual_blocks(x)
+        x = self.residual_blocks(x)
         x = self.up_blocks(x)
         return self.last(x)
 

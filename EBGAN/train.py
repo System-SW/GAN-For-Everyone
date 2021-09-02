@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -5,16 +6,18 @@ import torchvision
 from tqdm import tqdm
 
 import hyperparameters as hp
-from dataset import Dataset
+from dataset import DataLoader
 from model import Discriminator, Generator, initialize_weights
-from opt import Template
+from opt import Metrics, Template
 
 
 class EBGAN(Template):
     def __init__(self):
-        super().__init__(device=hp.DEVICE, seed=hp.SEED, model_name="EBGAN")
+        super().__init__(
+            device=hp.DEVICE, seed=hp.SEED, model_name=self.__class__.__name__
+        )
 
-        self.dataset = Dataset(hp.DATASET)
+        self.dataloader = DataLoader(hp.DATASET)
         self.gen = Generator(hp.NOISE_DIM, hp.IMAGE_CHANNELS, hp.GEN_DIM).to(
             self.device
         )
@@ -22,7 +25,6 @@ class EBGAN(Template):
         initialize_weights(self.gen)
         initialize_weights(self.disc)
 
-        self.FIXED_NOISE = torch.randn(32, hp.NOISE_DIM, 1, 1, device=self.device)
         # optimizer
         self.opt_gen = optim.Adam(
             self.gen.parameters(), lr=hp.LEARNING_RATE, betas=hp.BETAS
@@ -37,7 +39,22 @@ class EBGAN(Template):
         self.add_image = lambda tag, image: self.tb.add_image(
             tag,
             torchvision.utils.make_grid(image[: hp.SAMPLE_SIZE], normalize=True),
-            global_step=self.itr,
+            self.itr,
+        )
+
+        self.lossD_real = Metrics("TRAIN/lossD_real")
+        self.lossD_fake = Metrics("TRAIN/lossD_fake")
+        self.lossD = Metrics("TRAIN/lossD")
+        self.lossG = Metrics("TRAIN/lossG")
+
+        self.restore_checkpoint(
+            hp.RESTORE_CKPT_PATH,
+            self.gen,
+            self.disc,
+            self.opt_gen,
+            self.opt_disc,
+            hp.LEARNING_RATE,
+            self.device,
         )
 
     def pullaway_loss(self, embeddings):
@@ -52,7 +69,10 @@ class EBGAN(Template):
         return pt_loss
 
     def train(self):
-        loader = self.dataset.create_dataloader(hp.BATCH_SIZE)
+        loader, _ = self.dataloader.create_dataloader(hp.BATCH_SIZE, hp.SAMPLE_SIZE)
+        FIXED_NOISE = torch.randn(
+            hp.SAMPLE_SIZE, hp.NOISE_DIM, 1, 1, device=self.device
+        )
         self.gen.train()
         self.disc.train()
 
@@ -60,6 +80,7 @@ class EBGAN(Template):
         for epoch in range(hp.NUM_EPOCHS):
             pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (real, _) in pbar:
+                self.itr += 1
                 real = real.to(self.device)
                 batch_size = real.shape[0]
                 noise = torch.randn(batch_size, hp.NOISE_DIM, 1, 1, device=self.device)
@@ -73,10 +94,7 @@ class EBGAN(Template):
                     # REAL
                     real_, real_hidden = self.disc(real)
                     lossD_real = self.MSE_loss(real_, real)
-
-                    lossD = lossD_real + torch.clip(
-                        hp.MARGIN - lossD_fake, min=0
-                    )  # max(a,0)
+                    lossD = lossD_real + torch.clip(hp.MARGIN - lossD_fake, min=0)
 
                 self.disc.zero_grad()
                 self.scaler_dis.scale(lossD).backward()
@@ -97,39 +115,39 @@ class EBGAN(Template):
                 self.scaler_gen.step(self.opt_gen)
                 self.scaler_gen.update()
 
-                with torch.no_grad():
-                    if batch_idx % hp.LOG_INTERVAL == 0:
-                        self.tb.add_scalar("LossD", lossD.item(), global_step=self.itr)
-                        self.tb.add_scalar(
-                            "LossD/real", lossD_real.item(), global_step=self.itr
-                        )
-                        self.tb.add_scalar(
-                            "LossD/fake", lossD_fake.item(), global_step=self.itr
-                        )
+                self.lossD_real.update_state(lossD_real)
+                self.lossD_fake.update_state(lossD_fake)
+                self.lossD.update_state(lossD)
+                self.lossG.update_state(lossG)
 
-                        self.tb.add_scalar("LossG", lossG.item(), global_step=self.itr)
+                if batch_idx % hp.LOG_INTERVAL == 0:
+                    lossD_real = self.logging_scaler(self.lossD_real)
+                    lossD_fake = self.logging_scaler(self.lossD_fake)
+                    lossD = self.logging_scaler(self.lossD)
+                    lossG = self.logging_scaler(self.lossG)
+                    pbar.set_description_str(
+                        f"Epoch[{epoch+1} / {hp.NUM_EPOCHS}], "
+                        f"lossD_real:{lossD_real: .2f}, "
+                        f"lossD_fake:{lossD_fake: .2f}, "
+                        f"lossD:{lossD: .2f}, "
+                        f"lossG:{lossG: .2f} "
+                    )
 
-                    if batch_idx % hp.TEST_INTERVAL == 0:
-                        pbar.set_description_str(
-                            f"Epoch[{epoch+1} / {hp.NUM_EPOCHS}], "
-                            f"lossD:{lossD.item(): .2f}, "
-                            f"lossG:{lossG.item(): .2f} "
-                        )
-                        self.test(real)
-                        self.add_image("Train/disc_fake_", fake_)
-                        self.add_image("Train/disc_real_", real_)
-                        self.add_image("Train/disc_real", real)
+                if batch_idx % hp.TEST_INTERVAL == 0:
+                    test_image = self.test(
+                        self.gen, real[: hp.SAMPLE_SIZE], FIXED_NOISE
+                    )
+                    self.add_image("Train/disc_fake_", fake_)
+                    self.add_image("Train/disc_real_", real_)
+                    self.add_image("Train/disc_real", real)
+            # logging model parameters
+            self.logging_weight_and_gradient("GEN", self.gen, self.itr)
+            self.logging_weight_and_gradient("DISC", self.disc, self.itr)
 
-                self.itr += 1
-
-    def test(self, real):
-        self.gen.eval()
-        fake = self.gen(self.FIXED_NOISE)
-        img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
-        img_grid_real = torchvision.utils.make_grid(real[:32], normalize=True)
-        self.tb.add_image("Fake Images", img_grid_fake, global_step=self.itr)
-        self.tb.add_image("Real Images", img_grid_real, global_step=self.itr)
-        self.gen.train()
+            self.save_image_to_logdir(test_image, epoch + 1)
+            self.save_checkpoint(
+                self.gen, self.disc, self.opt_gen, self.opt_disc, epoch + 1
+            )
 
 
 if __name__ == "__main__":

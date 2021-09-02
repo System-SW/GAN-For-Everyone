@@ -5,17 +5,21 @@ import torchvision
 from tqdm import tqdm
 
 import hyperparameters as hp
-from dataset import Dataset
+from dataset import DataLoader
 from model import Discriminator, Generator
-from losses import VGGLoss
-from opt import Template
+from losses import VGGPerceptualLoss
+from opt import Metrics, Template
 
 
 class SRGAN(Template):
     def __init__(self):
-        super().__init__(device=hp.DEVICE, seed=hp.SEED, model_name="SRGAN")
+        super().__init__(
+            device=hp.DEVICE,
+            seed=hp.SEED,
+            model_name=self.__class__.__name__,
+        )
 
-        self.dataset = Dataset(hp.DATASET)
+        self.dataset = DataLoader(hp.DATASET)
         self.gen = Generator(
             hp.INPUT_CHANNELS, hp.OUTPUT_CHANNELS, hp.GEN_DIM, hp.NUM_RESIDUALS
         ).to(self.device)
@@ -30,15 +34,31 @@ class SRGAN(Template):
         )
 
         self.bce_loss = nn.BCEWithLogitsLoss().to(self.device)
-        self.vgg_loss = VGGLoss().to(self.device)
+        self.vgg_loss = VGGPerceptualLoss().to(self.device)
+
+        self.restore_checkpoint(
+            hp.RESTORE_CKPT_PATH,
+            self.gen,
+            self.disc,
+            self.opt_gen,
+            self.opt_disc,
+            hp.LEARNING_RATE,
+            self.device,
+        )
+        self.real_prob = Metrics("TRAIN/Real Prob")
+        self.fake_prob = Metrics("TRAIN/Fake Prob")
+        self.lossD_real = Metrics("TRAIN/lossD_real")
+        self.lossD_fake = Metrics("TRAIN/lossD_fake")
+        self.lossD = Metrics("TRAIN/lossD")
+        self.lossG_vgg = Metrics("TRAIN/lossG_vgg")
 
     def train(self):
-        loader = self.dataset.create_dataloader(hp.BATCH_SIZE)
+        loader, _ = self.dataset.create_dataloader(hp.BATCH_SIZE, hp.SAMPLE_SIZE)
         self.gen.train()
         self.disc.train()
 
         for lr_image, hr_image in loader:
-            FIX_DATA = {
+            FIXED_DATA = {
                 "lr_image": lr_image[: hp.SAMPLE_SIZE].to(self.device),
                 "hr_image": hr_image[: hp.SAMPLE_SIZE].to(self.device),
             }
@@ -48,6 +68,7 @@ class SRGAN(Template):
         for epoch in range(hp.NUM_EPOCHS):
             pbar = tqdm(enumerate(loader), total=len(loader), leave=False)
             for batch_idx, (lr_image, hr_image) in pbar:
+                self.itr += 1
                 lr_image = lr_image.to(self.device)
                 hr_image = hr_image.to(self.device)
 
@@ -76,57 +97,47 @@ class SRGAN(Template):
                 lossG.backward()
                 self.opt_gen.step()
 
+                # Logging
+                self.real_prob.update_state(self.gan_prob(disc_real))
+                self.fake_prob.update_state(self.gan_prob(disc_fake))
+                self.lossD_real.update_state(lossD_real)
+                self.lossD_fake.update_state(lossD_fake)
+                self.lossD.update_state(lossD)
+                self.lossG_vgg.update_state(lossG_vgg)
+
                 with torch.no_grad():
                     if batch_idx % hp.LOG_INTERVAL == 0:
-                        log_disc_real = self.gan_prob(disc_real).item()
-                        log_disc_fake = self.gan_prob(disc_fake).item()
-                        log_vgg_loss = lossG_vgg.item()
-                        lossD = lossD.item()
-                        lossG = lossG.item()
+                        real_prob = self.logging_scaler(self.real_prob)
+                        fake_prob = self.logging_scaler(self.fake_prob)
+                        lossD_real = self.logging_scaler(self.lossD_real)
+                        lossD_fake = self.logging_scaler(self.lossD_fake)
+                        lossD = self.logging_scaler(self.lossD)
+                        lossG_vgg = self.logging_scaler(self.lossG_vgg)
 
-                        self.tb.add_scalar(
-                            "TRAIN/Real Prob",
-                            log_disc_real,
-                            global_step=self.itr,
-                        )
-                        self.tb.add_scalar(
-                            "TRAIN/Fake Prob",
-                            log_disc_fake,
-                            global_step=self.itr,
-                        )
-                        self.tb.add_scalar(
-                            "TRAIN/VGG Loss",
-                            log_vgg_loss,
-                            global_step=self.itr,
-                        )
-                        self.tb.add_scalar("TRAIN/LossD", lossD, global_step=self.itr)
-                        self.tb.add_scalar("TRAIN/LossG", lossG, global_step=self.itr)
-
-                    if batch_idx % hp.TEST_INTERVAL == 0:
                         pbar.set_description_str(
                             f"Epoch[{epoch+1} / {hp.NUM_EPOCHS}], "
-                            f"real:{log_disc_real: .2f}, "
-                            f"fake:{log_disc_fake: .2f}, "
+                            f"real:{real_prob: .2f}, "
+                            f"fake:{fake_prob: .2f}, "
                             f"lossD:{lossD: .2f}, "
-                            f"lossG_VGG:{log_vgg_loss: .2f} "
-                            f"lossG:{lossG: .2f} "
+                            f"lossG_vgg:{lossG_vgg: .2f} "
                         )
-                        self.test(FIX_DATA["lr_image"], FIX_DATA["hr_image"])
-                self.itr += 1
+
+                    if batch_idx % hp.TEST_INTERVAL == 0:
+                        self.test(FIXED_DATA["lr_image"], FIXED_DATA["hr_image"])
+
+            # Epoch process
+            self.logging_weight_and_gradient("GEN", self.gen, self.itr)
+            self.logging_weight_and_gradient("DISC", self.disc, self.itr)
+
+            test_image = self.test(FIXED_DATA["lr_image"], FIXED_DATA["hr_image"])
+            self.save_image_to_logdir(test_image, epoch + 1)
+
             self.save_checkpoint(
-                self.gen, self.disc, self.opt_gen, self.opt_disc, epoch
+                self.gen, self.disc, self.opt_gen, self.opt_disc, epoch + 1
             )
 
     def test(self, lr_image, hr_image):
-        self.gen.eval()
-        fake = self.gen(lr_image)
-        img_grid_inputs = torchvision.utils.make_grid(lr_image, normalize=True)
-        img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
-        img_grid_real = torchvision.utils.make_grid(hr_image, normalize=True)
-        self.tb.add_image("Input Images", img_grid_inputs, global_step=self.itr)
-        self.tb.add_image("Fake Images", img_grid_fake, global_step=self.itr)
-        self.tb.add_image("Real Images", img_grid_real, global_step=self.itr)
-        self.gen.train()
+        return super().test(self.gen, hr_image, lr_image)
 
 
 if __name__ == "__main__":

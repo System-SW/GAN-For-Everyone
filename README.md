@@ -1,29 +1,29 @@
 # **Table of GANs**
 
- | Model                            | Year | Paper                                         | State         |
- | :------------------------------- | ---- | --------------------------------------------- | ------------- |
- | [GAN](./GAN/src/README.pdf)      | 2014 | [PDF](./GAN/src/paper_GAN.pdf)                | Done          |
- | [cGAN](./cGAN/README.md)         | 2014 | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
- | [DCGAN](./DCGAN/README.md)       | 2016 | [PDF](./DCGAN/src/paper-DCGAN.pdf)            | Done          |
- | [WGAN](./WGAN/README.md)         | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)              | Done          |
- | [WGAN-GP](./WGAN-GP/README.md)   | 2017 | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf)        | **Code Done** |
- | [LSGAN](./LSGAN/README.md)       | 2017 | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
- | [EBGAN](./EBGAN/README.md)       | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
- | [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
- | [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
- | [SRGAN](./SRGAN/README.md) | 2016 | [PDF](./SRGAN/src/paper-paper-SRGAN.pdf)      | **Code Done** |
- | [ACGAN](./ACGAN/README.md) | 2016 | [PDF](./ACGAN/src/paper-paper-ACGAN.pdf)      | **Code Done** |
+| Model                            | Year | Paper                                         | State         |
+| :------------------------------- | ---- | --------------------------------------------- | ------------- |
+| [GAN](./GAN/src/README.pdf)      | 2014 | [PDF](./GAN/src/paper_GAN.pdf)                | Done          |
+| [cGAN](./cGAN/README.md)         | 2014 | [PDF](./cGAN/src/paper-Conditional%20GAN.pdf) | **Code Done** |
+| [DCGAN](./DCGAN/README.md)       | 2016 | [PDF](./DCGAN/src/paper-DCGAN.pdf)            | Done          |
+| [WGAN](./WGAN/README.md)         | 2017 | [PDF](./WGAN/src/paper-WGAN.pdf)              | Done          |
+| [WGAN-GP](./WGAN-GP/README.md)   | 2017 | [PDF](./WGAN-GP/src/paper-WGAN-GP.pdf)        | **Code Done** |
+| [LSGAN](./LSGAN/README.md)       | 2017 | [PDF](./LSGAN/src/paper-LSGAN.pdf)            | **Code Done** |
+| [EBGAN](./EBGAN/README.md)       | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
+| [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
+| [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
+| [SRGAN](./SRGAN/README.md)       | 2016 | [PDF](./SRGAN/src/paper-paper-SRGAN.pdf)      | **Code Done** |
+| [ACGAN](./ACGAN/README.md)       | 2016 | [PDF](./ACGAN/src/paper-paper-ACGAN.pdf)      | **Code Done** |
 
 # **Environment**
 
 ```swift
-OS: Ubuntu 20.04 LTS x86_64 
-Kernel: 5.4.0-80-generic 
-Shell: zsh 5.8 
-CPU: Intel i9-10980XE (36) @ 4.800GHz 
-GPU 00: NVIDIA RTX-3090 NVIDIA Corporation Device 2204 
-GPU 01: NVIDIA RTX-3090 NVIDIA Corporation Device 2204 
-Memory: 128512MiB 
+OS: Ubuntu 20.04 LTS x86_64
+Kernel: 5.4.0-80-generic
+Shell: zsh 5.8
+CPU: Intel i9-10980XE (36) @ 4.800GHz
+GPU 00: NVIDIA RTX-3090 NVIDIA Corporation Device 2204
+GPU 01: NVIDIA RTX-3090 NVIDIA Corporation Device 2204
+Memory: 128512MiB
 ```
 
 # **Requirements**
@@ -39,8 +39,8 @@ Memory: 128512MiB
 # **Tutorial**
 
 - [Repository Rules](./Rules.md)
-- [Anaconda CUDA Env install (Local)](./Tutorial/Anaconda%20CUDA%20Env%20install(local).md)
-- [Anaconda CUDA Env install (Docker)](./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md)
+- [Anaconda CUDA Env install (Local)](<./Tutorial/Anaconda%20CUDA%20Env%20install(local).md>)
+- [Anaconda CUDA Env install (Docker)](<./Tutorial/Anaconda%20CUDA%20Env%20install(docker).md>)
 - [Useful Tools](./Tutorial/Tools.md)
 - [AMP(Automatic Mixed Precision) package](https://pytorch.org/docs/stable/notes/amp_examples.html)
 - [Kaggle API(Dataset Download)](./Tutorial/Kaggle%20cli%20tool.md)
@@ -58,24 +58,24 @@ Memory: 128512MiB
 각 구현체의 경우 디렉터리로 구분되어 있으며 각 구현체 디렉터리의 경우 아래와 같은 구조를 기본으로 합니다. 별도의 구성요소가 포함되면 각 구현체 README.md에 설명을 포함합니다.
 
 ```bash
-# (option   : 학습 과정 중 생성
+# (option)  : 학습 과정 중 생성
 # (*)       : 학습에 꼭 필요 혹은 기본 구성요소
 RepoRootPath
-│── opt.py                  # Template class 와 같은 부가 요소
-├── dataset.py              # 학습 데이터 전처리(*)
-├── dataset                 # downloaded data dir(option)
+│── opt.py                  # Template class 와 같은 부가 요소 link to MyAwesomeModel's
+├── dataset                 # 학습 데이터 전처리(*) link to MyAwesomeModel's
+├── DATASET                 # downloaded data dir (*)
 ├── GAN                     # 구현된 모델(구현체)
-│   ├── log                 # log dir(option)
-│   ├── log.tar.gz          # 비교를 위한 사전 학습 로그 (option)
-│   ├── [model paper].pdf   # 구현체 원본 논문(option)
 │   ├── README.md           # 구현체 개별 설명(option)
+│   ├── log                 # log dir(option)
 │   ├── hyperparameters.py  # 학습 파라미터(*)
-│   ├── model.py            # 구현된 모델(*)
+│   ├── model.py or module  # 구현된 모델(*)
 │   ├── train.py            # 구현체 학습자(*)
-│   ├── dataset.py          # link to root dir's dataset.py (*)
-│   └── opt.py              # link to root dir's opt.py (*)
+│   ├── dataset             # link from root dir's dataset (*)
+│   ├── opt.py              # link from root dir's opt.py (*)
+│   ├── src
+│   │    └── [paper].pdf    # paper of model
 ├── DCGAN                   # 구현된 모델(구현체)
-├── MyAwesomeModel           # 구현된 모델(구현체)
+├── MyAwesomeModel          # 구현된 모델(구현체)
 ├── README.md
 ├── ... Etc
 ```
@@ -112,8 +112,7 @@ class Template(metaclass=ABCMeta):
         - 대부분의 구현은 여기서 이루어 짐
         """
 
-    @abstractmethod
-    def test(self):
+    def test(self,real):
         """
         Desc:
         - 학습 도중 test/sample 생성을 진행할 메서드
@@ -133,7 +132,7 @@ class MyAwesomeModelTrainer(Template):
         ...
     def test(self):
         ...
-
+    ...
 if __name__ == '__main__':
     # train.py에 main 작성
     trainer = MyAwesomeModelTrainer()

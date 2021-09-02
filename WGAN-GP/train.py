@@ -12,7 +12,11 @@ from opt import Metrics, Template
 
 class WGAN_GP(Template):
     def __init__(self):
-        super().__init__(device=hp.DEVICE, seed=hp.SEED, model_name="WGAN-GP")
+        super().__init__(
+            device=hp.DEVICE,
+            seed=hp.SEED,
+            model_name=self.__class__.__name__,
+        )
 
         self.dataloader = DataLoader(hp.DATASET)
         self.gen = Generator(hp.NOISE_DIM, hp.IMAGE_CHANNELS, hp.GEN_DIM).to(

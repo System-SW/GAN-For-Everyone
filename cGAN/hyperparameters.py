@@ -1,14 +1,25 @@
 import torch
+from dataset import *
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 SEED = 2333
+RESTORE_CKPT_PATH = None
 
 
 class DATASET_MNIST:
-    CAT = "mnist"
-    DIR = "../dataset/"
+    DS = MnistDataset
+    DIR = "../DATASET/"
     IMAGE_SIZE = 64
     IMAGE_CHANNELS = 1
+
+
+class DATASET_FMNIST(DATASET_MNIST):
+    DS = FashionMNISTDataset
+
+
+class DATASET_CIFAR10(DATASET_MNIST):
+    DS = Cifar10Dataset
+    IMAGE_CHANNELS = 3
 
 
 DATASET = DATASET_MNIST
@@ -16,12 +27,13 @@ IMAGE_SIZE = DATASET.IMAGE_SIZE
 IMAGE_CHANNELS = DATASET.IMAGE_CHANNELS
 
 BATCH_SIZE = 128
+SAMPLE_SIZE = 100
 NOISE_DIM = 100
 NUM_CLASSES = 10
 EMBEDDING_SIZE = 100
 GEN_DIM = 64
 DISC_DIM = 64
-NUM_EPOCHS = 5
+NUM_EPOCHS = 10
 
 LEARNING_RATE = 2e-4
 BETAS = (0.5, 0.999)

@@ -1,13 +1,15 @@
-from pickle import TRUE
+from dataset.dataset import CelebADatasetSRGAN
 import torch
+from dataset import *
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 SEED = 2333
+RESTORE_CKPT_PATH = None
 
 
 class DATASET_CELEBS:
-    CAT = "celebs"
-    DIR = "../dataset/celebA"
+    DS = CelebADatasetSRGAN
+    DIR = "../DATASET/celebA"
     IMAGE_SIZE = 96
     LR_SIZE = 96
     OUTPUT_CHANNELS = 3
@@ -25,6 +27,7 @@ GEN_DIM = 64
 DISC_DIM = 64
 
 BATCH_SIZE = 16
+SAMPLE_SIZE = 4 ** 2
 LEARNING_RATE = 1e-4
 BETAS = (0.9, 0.999)
 
@@ -32,10 +35,5 @@ NUM_EPOCHS = 100
 LAMBDA_ADV = 1e-3
 LAMBDA_VGG = 0.006
 
-GAN_MODE = True
-GENERATOR_WIGHT_PATH = 'generator_mse.pth'
-
-SAMPLE_SIZE = 8
 LOG_INTERVAL = 10
 TEST_INTERVAL = 100
-CKPT_PATH = None  # U R checkpoint pth path
