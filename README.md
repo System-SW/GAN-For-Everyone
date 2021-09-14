@@ -11,8 +11,9 @@
 | [EBGAN](./EBGAN/README.md)       | 2016 | [PDF](./EBGAN/src/paper-EBGAN.pdf)            | **Code Done** |
 | [Pix2Pix](./Pix2Pix/README.md)   | 2016 | [PDF](./Pix2Pix/src/paper-Pix2Pix.pdf)        | **Code Done** |
 | [CycleGAN](./CycleGAN/README.md) | 2017 | [PDF](./CycleGAN/src/paper-CycleGAN.pdf)      | **Code Done** |
-| [SRGAN](./SRGAN/README.md)       | 2016 | [PDF](./SRGAN/src/paper-paper-SRGAN.pdf)      | **Code Done** |
-| [ACGAN](./ACGAN/README.md)       | 2016 | [PDF](./ACGAN/src/paper-paper-ACGAN.pdf)      | **Code Done** |
+| [SRGAN](./SRGAN/README.md)       | 2016 | [PDF](./SRGAN/src/paper-SRGAN.pdf)            | **Code Done** |
+| [ACGAN](./ACGAN/README.md)       | 2016 | [PDF](./ACGAN/src/paper-ACGAN.pdf)            | **Code Done** |
+| [ProGAN](./ProGAN/README.md)     | 2018 | [PDF](./ProGAN/src/paper-ProGAN.pdf)          | **Code Done** |
 
 # **Environment**
 
