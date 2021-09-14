@@ -369,3 +369,20 @@ class HorseZebraDataset(data.Dataset):
 
         # return Horse, Zebra
         return augmentations["image"], augmentations["image0"]
+
+
+class CelebaHQ(datasets.ImageFolder):
+    def __init__(self, dataset) -> None:
+        image_size = dataset.IMAGE_SIZE
+        transform = transforms.Compose(
+            [
+                transforms.Resize((image_size, image_size)),
+                transforms.ToTensor(),
+                transforms.RandomHorizontalFlip(p=0.5),
+                transforms.Normalize(
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)],
+                    [0.5 for _ in range(dataset.IMAGE_CHANNELS)],
+                ),
+            ]
+        )
+        super().__init__(dataset.DIR, transform=transform)
